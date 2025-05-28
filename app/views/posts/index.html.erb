@@ -1,0 +1,11 @@
+<h1>🎵 みんなの投稿一覧 🎵</h1>
+
+<% @posts.each do |post| %>
+  <div class="post">
+    <iframe width="300" height="180" src="<%= post.video_url %>" frameborder="0" allowfullscreen></iframe>
+    <p><strong>歌詞:</strong><br><%= simple_format(post.lyrics) %></p>
+    <p><strong>メモ:</strong><br><%= simple_format(post.memo) %></p>
+    <p>投稿者: <%= post.user.email %></p>
+    <hr>
+  </div>
+<% end %>
