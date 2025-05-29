@@ -1,6 +1,8 @@
 class PostsController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :show]
-  before_action :set_post, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: [:index, :preview]
+  before_action :set_post, only: [:edit, :update, :destroy]
+  before_action :authorize_user!, only: [:edit, :update, :destroy]
+
 
 def index
   @posts = Post.includes(:user).order(created_at: :desc)
@@ -21,26 +23,26 @@ def create
   end
 end
 
-
-  def show
-  @post = Post.find(params[:id])
-  end
-
   def edit
   end
 
-    def update
-    if @post.update(post_params)
-      redirect_to @post, notice: "編集が完了しました！"
-    else
-      render :edit
-    end
-    end
+def update
+  if @post.update(post_params)
+    redirect_to root_path, notice: "編集が完了しました！"
+  else
+    render :edit
+  end
+end
 
     def destroy
     @post.destroy
     redirect_to posts_path, notice: "削除しました！"
     end
+
+    def preview
+    @post = Post.find(params[:id])
+    end
+
 
 
   private
@@ -52,4 +54,10 @@ end
   def post_params
     params.require(:post).permit(:video_url, :lyrics, :memo)
   end
+
+  def authorize_user!
+  @post = Post.find(params[:id])
+  redirect_to root_path, alert: "不正なアクセスです" unless @post.user == current_user
+  end
 end
+

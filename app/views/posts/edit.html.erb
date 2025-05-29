@@ -3,3 +3,7 @@
 <%= render "form", post: @post %>
 
 <%= link_to "← 戻る", post_path(@post), class: "load-btn" %>
+
+<div style="margin-top: 20px;">
+  <%= link_to "🗑️ 削除する", post_path(@post), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "load-btn" %>
+</div>

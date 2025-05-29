@@ -6,7 +6,12 @@
 
 <% @posts.each do |post| %>
   <div class="post-card" style="margin-bottom: 30px;">
-    <%= link_to post_path(post), style: "text-decoration: none; color: inherit; display: block;" do %>
+    <% link_path =
+        user_signed_in? && current_user == post.user ?
+        edit_post_path(post) :
+        preview_post_path(post) %>
+
+    <%= link_to link_path, style: "text-decoration: none; color: inherit; display: block;" do %>
       <iframe width="300" height="169"
               src="<%= youtube_embed_url(post.video_url) %>"
               frameborder="0"
