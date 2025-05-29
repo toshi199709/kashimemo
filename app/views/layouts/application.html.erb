@@ -5,13 +5,28 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    
+
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body>
-    <%= link_to 'トップへ戻る', root_path %>
+    <!-- ヘッダー -->
+    <header style="position: relative; padding: 20px 0; text-align: center;">
+      <%= link_to "🎶 Kashimemo", root_path, style: "text-decoration: none; font-size: 24px; font-weight: bold;" %>
+
+      <!-- ログイン状態によってボタン表示 -->
+      <div style="position: absolute; top: 20px; right: 20px;">
+        <% if user_signed_in? %>
+          ようこそ、<%= current_user.nickname %> さん |
+          <%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: { turbo: false } %>
+        <% else %>
+          <%= link_to "ログイン", new_user_session_path %> |
+          <%= link_to "新規登録", new_user_registration_path %>
+        <% end %>
+      </div>
+    </header>
+
     <%= yield %>
   </body>
 </html>
