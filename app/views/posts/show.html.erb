@@ -18,8 +18,6 @@
 </div>
 
 <div style="margin-top: 30px; text-align: center;">
-  <%= link_to "← 一覧に戻る", posts_path, class: "load-btn" %>
-
   <% if user_signed_in? && current_user == @post.user %>
     <%= link_to "✏️ 編集する", edit_post_path(@post), class: "load-btn" %>
     <%= link_to "🗑️ 削除", post_path(@post), data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, class: "load-btn" %>
