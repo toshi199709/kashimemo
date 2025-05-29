@@ -1,0 +1,30 @@
+<%= form_with model: post, local: true do |f| %>
+  <div class="container">
+    <div class="left-column">
+      <iframe id="youtube-frame" width="100%" height="315"
+              src="<%= youtube_embed_url(post.video_url) %>"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+      </iframe>
+
+      <%= f.label :lyrics, "歌詞" %><br>
+      <%= f.text_area :lyrics, class: "lyrics-box", rows: 10 %>
+    </div>
+
+    <div class="right-column">
+      <div class="url-input-wrapper">
+        <%= f.label :video_url, "YouTubeのURL" %><br>
+        <%= f.text_field :video_url, id: "youtube-url", class: "url-input" %>
+        <button type="button" id="load-video-btn" class="load-btn">読み込む</button>
+      </div>
+
+      <%= f.label :memo, "メモ" %><br>
+      <%= f.text_area :memo, class: "memo-box", rows: 10 %>
+    </div>
+  </div>
+
+  <div style="text-align: center; margin-top: 20px;">
+    <%= f.submit(post.persisted? ? "更新する" : "保存する", class: "load-btn") %>
+  </div>
+<% end %>

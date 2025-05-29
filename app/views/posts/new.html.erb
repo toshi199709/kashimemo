@@ -1,2 +1,46 @@
-<h1>Posts#new</h1>
-<p>Find me in app/views/posts/new.html.erb</p>
+<% if @post.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@post.errors.count, "件のエラー") %>があります：</h2>
+    <ul>
+      <% @post.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+
+<h1>🎶 歌詞とメモアプリ 🎶</h1>
+
+<%= form_with model: @post, local: true do |f| %>
+
+<div class="container">
+  <!-- 左側：動画 + 歌詞 -->
+  <div class="left-column">
+<iframe id="youtube-frame" width="100%" height="315"
+        src="<%= @post&.video_url.present? ? youtube_embed_url(@post.video_url) : '' %>"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+</iframe>
+
+
+    <%= f.text_area :lyrics, placeholder: "ここに歌詞を入力...", class: "lyrics-box" %>
+  </div>
+
+  <!-- 右側：URL入力 + メモ -->
+  <div class="right-column">
+    <div class="url-input-wrapper">
+      <%= f.text_field :video_url, id: "youtube-url", placeholder: "YouTubeのURLを入力...", class: "url-input" %>
+      <button id="load-video-btn" class="load-btn">読み込む</button>
+    </div>
+
+    <%= f.text_area :memo, placeholder: "ここにメモを入力...", class: "memo-box" %>
+  </div>
+</div>
+
+  <div style="text-align: center; margin-top: 20px;">
+    <%= f.submit "保存する", class: "load-btn" %>
+  </div>
+<% end %>
