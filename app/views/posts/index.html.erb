@@ -1,11 +1,23 @@
-<h1>🎵 みんなの投稿一覧 🎵</h1>
+<%= link_to "＋ 新しい投稿を作成する", new_post_path, class: "load-btn", style: "display: inline-block; margin-bottom: 20px;" %>
 
 <% @posts.each do |post| %>
-  <div class="post">
-    <iframe width="300" height="180" src="<%= post.video_url %>" frameborder="0" allowfullscreen></iframe>
-    <p><strong>歌詞:</strong><br><%= simple_format(post.lyrics) %></p>
-    <p><strong>メモ:</strong><br><%= simple_format(post.memo) %></p>
-    <p>投稿者: <%= post.user.email %></p>
+  <div class="post-card">
+    <%= link_to post_path(post), style: "text-decoration: none; color: inherit;" do %>
+      <iframe width="300" height="169"
+              src="<%= youtube_embed_url(post.video_url) %>"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+      </iframe>
+
+      <p><strong>歌詞（一部）:</strong><br>
+        <%= truncate(post.lyrics, length: 100) %>
+      </p>
+
+      <p><strong>メモ（一部）:</strong><br>
+        <%= truncate(post.memo, length: 100) %>
+      </p>
+    <% end %>
     <hr>
   </div>
 <% end %>
