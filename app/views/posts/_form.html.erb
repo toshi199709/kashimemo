@@ -9,22 +9,27 @@
       </iframe>
 
       <%= f.label :lyrics, "歌詞" %><br>
-      <%= f.text_area :lyrics, class: "lyrics-box", rows: 10 %>
+      <%= f.text_area :lyrics, class: "lyrics-box", rows: 10, readonly: local_assigns[:readonly] %>
     </div>
 
     <div class="right-column">
       <div class="url-input-wrapper">
         <%= f.label :video_url, "YouTubeのURL" %><br>
-        <%= f.text_field :video_url, id: "youtube-url", class: "url-input" %>
-        <button type="button" id="load-video-btn" class="load-btn">読み込む</button>
+        <%= f.text_field :video_url, id: "youtube-url", class: "url-input", readonly: local_assigns[:readonly] %>
+
+        <% unless local_assigns[:readonly] %>
+          <button type="button" id="load-video-btn" class="load-btn">読み込む</button>
+        <% end %>
       </div>
 
       <%= f.label :memo, "メモ" %><br>
-      <%= f.text_area :memo, class: "memo-box", rows: 10 %>
+      <%= f.text_area :memo, class: "memo-box", rows: 10, readonly: local_assigns[:readonly] %>
     </div>
   </div>
 
-  <div style="text-align: center; margin-top: 20px;">
-    <%= f.submit(post.persisted? ? "更新する" : "保存する", class: "load-btn") %>
-  </div>
+  <% unless local_assigns[:readonly] %>
+    <div style="text-align: center; margin-top: 20px;">
+      <%= f.submit(post.persisted? ? "更新する" : "保存する", class: "load-btn") %>
+    </div>
+  <% end %>
 <% end %>
