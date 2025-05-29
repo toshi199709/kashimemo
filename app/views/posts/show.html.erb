@@ -1,2 +1,19 @@
-<h1>Posts#show</h1>
-<p>Find me in app/views/posts/show.html.erb</p>
+<h1>🎬 投稿詳細</h1>
+
+<div>
+  <iframe width="560" height="315"
+          src="<%= youtube_embed_url(@post.video_url) %>"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+  </iframe>
+</div>
+
+<p><strong>歌詞:</strong></p>
+<p><%= simple_format(@post.lyrics) %></p>
+
+<p><strong>メモ:</strong></p>
+<p><%= simple_format(@post.memo) %></p>
+
+<%= link_to "← 一覧に戻る", posts_path %>
+<%= link_to "✏️ 編集する", edit_post_path(@post), class: "load-btn" %>
