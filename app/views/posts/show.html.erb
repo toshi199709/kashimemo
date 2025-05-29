@@ -1,6 +1,6 @@
 <h1>🎬 投稿詳細</h1>
 
-<div>
+<div style="text-align: center;">
   <iframe width="560" height="315"
           src="<%= youtube_embed_url(@post.video_url) %>"
           frameborder="0"
@@ -9,11 +9,16 @@
   </iframe>
 </div>
 
-<p><strong>歌詞:</strong></p>
-<p><%= simple_format(@post.lyrics) %></p>
+<div style="margin-top: 20px;">
+  <p><strong>🎵 歌詞:</strong></p>
+  <p><%= simple_format(@post.lyrics) %></p>
 
-<p><strong>メモ:</strong></p>
-<p><%= simple_format(@post.memo) %></p>
+  <p><strong>📝 メモ:</strong></p>
+  <p><%= simple_format(@post.memo) %></p>
+</div>
 
-<%= link_to "← 一覧に戻る", posts_path %>
-<%= link_to "✏️ 編集する", edit_post_path(@post), class: "load-btn" %>
+<div style="margin-top: 30px; text-align: center;">
+  <%= link_to "← 一覧に戻る", posts_path, class: "load-btn" %>
+  <%= link_to "✏️ 編集する", edit_post_path(@post), class: "load-btn" %>
+  <%= link_to "🗑️ 削除", post_path(@post), data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, class: "load-btn" %>
+</div>
