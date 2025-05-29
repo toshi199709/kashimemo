@@ -26,13 +26,13 @@ end
   def edit
   end
 
-    def update
-    if @post.update(post_params)
-      redirect_to @post, notice: "編集が完了しました！"
-    else
-      render :edit
-    end
-    end
+def update
+  if @post.update(post_params)
+    redirect_to root_path, notice: "編集が完了しました！"
+  else
+    render :edit
+  end
+end
 
     def destroy
     @post.destroy
