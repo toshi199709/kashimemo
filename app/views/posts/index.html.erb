@@ -1,27 +1,29 @@
-<%= link_to "＋ 新しい投稿を作成する", new_post_path, class: "load-btn", style: "display: inline-block; margin-bottom: 20px;" %>
+<% if user_signed_in? %>
+  <div style="text-align: left; margin-bottom: 20px;">
+    <%= link_to "＋ 新しい投稿を作成する", new_post_path, class: "load-btn" %>
+  </div>
+<% end %>
 
-<% if @posts.empty? %>
-  <p>まだ投稿がありません。</p>
-<% else %>
-  <% @posts.each do |post| %>
-    <div class="post-card" style="margin-bottom: 30px;">
-      <%= link_to post_path(post), style: "text-decoration: none; color: inherit; display: block;" do %>
-        <iframe width="300" height="169"
-                src="<%= youtube_embed_url(post.video_url) %>"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen>
-        </iframe>
+<% @posts.each do |post| %>
+  <div class="post-card" style="margin-bottom: 30px;">
+    <%= link_to post_path(post), style: "text-decoration: none; color: inherit; display: block;" do %>
+      <iframe width="300" height="169"
+              src="<%= youtube_embed_url(post.video_url) %>"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+      </iframe>
 
-        <p><strong>歌詞（一部）:</strong><br>
-          <%= truncate(post.lyrics, length: 100) %>
-        </p>
+      <p><strong>投稿者:</strong> <%= post.user.nickname %></p>
 
-        <p><strong>メモ（一部）:</strong><br>
-          <%= truncate(post.memo, length: 100) %>
-        </p>
-      <% end %>
-      <hr>
-    </div>
-  <% end %>
+      <p><strong>歌詞（一部）:</strong><br>
+        <%= truncate(post.lyrics, length: 100) %>
+      </p>
+
+      <p><strong>メモ（一部）:</strong><br>
+        <%= truncate(post.memo, length: 100) %>
+      </p>
+    <% end %>
+    <hr>
+  </div>
 <% end %>
