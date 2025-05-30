@@ -1,3 +1,5 @@
+<% readonly = local_assigns[:readonly] || false %>
+
 <%= form_with model: post, local: true do |f| %>
   <div class="container">
     <div class="left-column">
@@ -9,25 +11,32 @@
       </iframe>
 
       <%= f.label :lyrics, "歌詞" %><br>
-      <%= f.text_area :lyrics, class: "lyrics-box", rows: 10, readonly: local_assigns[:readonly] %>
+      <%= f.text_area :lyrics, class: "lyrics-box", rows: 10, readonly: readonly %>
     </div>
 
     <div class="right-column">
       <div class="url-input-wrapper">
         <%= f.label :video_url, "YouTubeのURL" %><br>
-        <%= f.text_field :video_url, id: "youtube-url", class: "url-input", readonly: local_assigns[:readonly] %>
+        <%= f.text_field :video_url, id: "youtube-url", class: "url-input", readonly: readonly %>
 
-        <% unless local_assigns[:readonly] %>
+        <% unless readonly %>
           <button type="button" id="load-video-btn" class="load-btn">読み込む</button>
         <% end %>
       </div>
 
       <%= f.label :memo, "メモ" %><br>
-      <%= f.text_area :memo, class: "memo-box", rows: 10, readonly: local_assigns[:readonly] %>
+      <%= f.text_area :memo, class: "memo-box", rows: 10, readonly: readonly %>
     </div>
   </div>
 
-  <% unless local_assigns[:readonly] %>
+  <% unless readonly %>
+    <div style="margin-top: 20px;">
+      <%= f.label :is_public, "公開する" %>
+      <%= f.check_box :is_public %>
+    </div>
+  <% end %>
+
+  <% unless readonly %>
     <div style="text-align: center; margin-top: 20px;">
       <%= f.submit(post.persisted? ? "更新する" : "保存する", class: "load-btn") %>
     </div>
