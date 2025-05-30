@@ -3,10 +3,10 @@ Unobtrusive JavaScript
 https://github.com/rails/rails/blob/main/actionview/app/javascript
 Released under the MIT license
  */
-(function(global, factory) {
-  typeof exports === "object" && typeof module !== "undefined" ? module.exports = factory() : typeof define === "function" && define.amd ? define(factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, 
-  global.Rails = factory());
-})(this, (function() {
+(function (global, factory) {
+  typeof exports === "object" && typeof module !== "undefined" ? module.exports = factory() : typeof define === "function" && define.amd ? define(factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self,
+    global.Rails = factory());
+})(this, (function () {
   "use strict";
   const linkClickSelector = "a[data-confirm], a[data-method], a[data-remote]:not([disabled]), a[data-disable-with], a[data-disable]";
   const buttonClickSelector = {
@@ -28,7 +28,7 @@ Released under the MIT license
   };
   const cspNonce = () => nonce || loadCSPNonce();
   const m = Element.prototype.matches || Element.prototype.matchesSelector || Element.prototype.mozMatchesSelector || Element.prototype.msMatchesSelector || Element.prototype.oMatchesSelector || Element.prototype.webkitMatchesSelector;
-  const matches = function(element, selector) {
+  const matches = function (element, selector) {
     if (selector.exclude) {
       return m.call(element, selector.selector) && !m.call(element, selector.exclude);
     } else {
@@ -37,14 +37,14 @@ Released under the MIT license
   };
   const EXPANDO = "_ujsData";
   const getData = (element, key) => element[EXPANDO] ? element[EXPANDO][key] : undefined;
-  const setData = function(element, key, value) {
+  const setData = function (element, key, value) {
     if (!element[EXPANDO]) {
       element[EXPANDO] = {};
     }
     return element[EXPANDO][key] = value;
   };
   const $ = selector => Array.prototype.slice.call(document.querySelectorAll(selector));
-  const isContentEditable = function(element) {
+  const isContentEditable = function (element) {
     var isEditable = false;
     do {
       if (element.isContentEditable) {
@@ -86,7 +86,7 @@ Released under the MIT license
   };
   const ajax = options => {
     options = prepareOptions(options);
-    var xhr = createXHR(options, (function() {
+    var xhr = createXHR(options, (function () {
       const response = processResponse(xhr.response != null ? xhr.response : xhr.responseText, xhr.getResponseHeader("Content-Type"));
       if (Math.floor(xhr.status / 100) === 2) {
         if (typeof options.success === "function") {
@@ -106,7 +106,7 @@ Released under the MIT license
       return xhr.send(options.data);
     }
   };
-  var prepareOptions = function(options) {
+  var prepareOptions = function (options) {
     options.url = options.url || location.href;
     options.type = options.type.toUpperCase();
     if (options.type === "GET" && options.data) {
@@ -125,7 +125,7 @@ Released under the MIT license
     }
     return options;
   };
-  var createXHR = function(options, done) {
+  var createXHR = function (options, done) {
     const xhr = new XMLHttpRequest;
     xhr.open(options.type, options.url, true);
     xhr.setRequestHeader("Accept", options.accept);
@@ -137,19 +137,19 @@ Released under the MIT license
       CSRFProtection(xhr);
     }
     xhr.withCredentials = !!options.withCredentials;
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = function () {
       if (xhr.readyState === XMLHttpRequest.DONE) {
         return done(xhr);
       }
     };
     return xhr;
   };
-  var processResponse = function(response, type) {
+  var processResponse = function (response, type) {
     if (typeof response === "string" && typeof type === "string") {
       if (type.match(/\bjson\b/)) {
         try {
           response = JSON.parse(response);
-        } catch (error) {}
+        } catch (error) { }
       } else if (type.match(/\b(?:java|ecma)script\b/)) {
         const script = document.createElement("script");
         script.setAttribute("nonce", cspNonce());
@@ -160,13 +160,13 @@ Released under the MIT license
         type = type.replace(/;.+/, "");
         try {
           response = parser.parseFromString(response, type);
-        } catch (error1) {}
+        } catch (error1) { }
       }
     }
     return response;
   };
   const href = element => element.href;
-  const isCrossDomain = function(url) {
+  const isCrossDomain = function (url) {
     const originAnchor = document.createElement("a");
     originAnchor.href = location.href;
     const urlAnchor = document.createElement("a");
@@ -178,16 +178,16 @@ Released under the MIT license
     }
   };
   let preventDefault;
-  let {CustomEvent: CustomEvent} = window;
+  let { CustomEvent: CustomEvent } = window;
   if (typeof CustomEvent !== "function") {
-    CustomEvent = function(event, params) {
+    CustomEvent = function (event, params) {
       const evt = document.createEvent("CustomEvent");
       evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
       return evt;
     };
     CustomEvent.prototype = window.Event.prototype;
-    ({preventDefault: preventDefault} = CustomEvent.prototype);
-    CustomEvent.prototype.preventDefault = function() {
+    ({ preventDefault: preventDefault } = CustomEvent.prototype);
+    CustomEvent.prototype.preventDefault = function () {
       const result = preventDefault.call(this);
       if (this.cancelable && !this.defaultPrevented) {
         Object.defineProperty(this, "defaultPrevented", {
@@ -214,8 +214,8 @@ Released under the MIT license
     e.stopPropagation();
     e.stopImmediatePropagation();
   };
-  const delegate = (element, selector, eventType, handler) => element.addEventListener(eventType, (function(e) {
-    let {target: target} = e;
+  const delegate = (element, selector, eventType, handler) => element.addEventListener(eventType, (function (e) {
+    let { target: target } = e;
     while (!!(target instanceof Element) && !matches(target, selector)) {
       target = target.parentNode;
     }
@@ -226,12 +226,12 @@ Released under the MIT license
   }));
   const toArray = e => Array.prototype.slice.call(e);
   const serializeElement = (element, additionalParam) => {
-    let inputs = [ element ];
+    let inputs = [element];
     if (matches(element, "form")) {
       inputs = toArray(element.elements);
     }
     const params = [];
-    inputs.forEach((function(input) {
+    inputs.forEach((function (input) {
       if (!input.name || input.disabled) {
         return;
       }
@@ -239,7 +239,7 @@ Released under the MIT license
         return;
       }
       if (matches(input, "select")) {
-        toArray(input.options).forEach((function(option) {
+        toArray(input.options).forEach((function (option) {
           if (option.selected) {
             params.push({
               name: input.name,
@@ -247,7 +247,7 @@ Released under the MIT license
             });
           }
         }));
-      } else if (input.checked || [ "radio", "checkbox", "submit" ].indexOf(input.type) === -1) {
+      } else if (input.checked || ["radio", "checkbox", "submit"].indexOf(input.type) === -1) {
         params.push({
           name: input.name,
           value: input.value
@@ -257,7 +257,7 @@ Released under the MIT license
     if (additionalParam) {
       params.push(additionalParam);
     }
-    return params.map((function(param) {
+    return params.map((function (param) {
       if (param.name) {
         return `${encodeURIComponent(param.name)}=${encodeURIComponent(param.value)}`;
       } else {
@@ -272,13 +272,13 @@ Released under the MIT license
       return toArray(form.querySelectorAll(selector));
     }
   };
-  const handleConfirmWithRails = rails => function(e) {
+  const handleConfirmWithRails = rails => function (e) {
     if (!allowAction(this, rails)) {
       stopEverything(e);
     }
   };
   const confirm = (message, element) => window.confirm(message);
-  var allowAction = function(element, rails) {
+  var allowAction = function (element, rails) {
     let callback;
     const message = element.getAttribute("data-confirm");
     if (!message) {
@@ -288,12 +288,12 @@ Released under the MIT license
     if (fire(element, "confirm")) {
       try {
         answer = rails.confirm(message, element);
-      } catch (error) {}
-      callback = fire(element, "confirm:complete", [ answer ]);
+      } catch (error) { }
+      callback = fire(element, "confirm:complete", [answer]);
     }
     return answer && callback;
   };
-  const handleDisabledElement = function(e) {
+  const handleDisabledElement = function (e) {
     const element = this;
     if (element.disabled) {
       stopEverything(e);
@@ -333,7 +333,7 @@ Released under the MIT license
       return disableFormElements(element);
     }
   };
-  var disableLinkElement = function(element) {
+  var disableLinkElement = function (element) {
     if (getData(element, "ujs:disabled")) {
       return;
     }
@@ -345,7 +345,7 @@ Released under the MIT license
     element.addEventListener("click", stopEverything);
     return setData(element, "ujs:disabled", true);
   };
-  var enableLinkElement = function(element) {
+  var enableLinkElement = function (element) {
     const originalText = getData(element, "ujs:enable-with");
     if (originalText != null) {
       element.innerHTML = originalText;
@@ -355,7 +355,7 @@ Released under the MIT license
     return setData(element, "ujs:disabled", null);
   };
   var disableFormElements = form => formElements(form, formDisableSelector).forEach(disableFormElement);
-  var disableFormElement = function(element) {
+  var disableFormElement = function (element) {
     if (getData(element, "ujs:disabled")) {
       return;
     }
@@ -373,7 +373,7 @@ Released under the MIT license
     return setData(element, "ujs:disabled", true);
   };
   var enableFormElements = form => formElements(form, formEnableSelector).forEach((element => enableFormElement(element)));
-  var enableFormElement = function(element) {
+  var enableFormElement = function (element) {
     const originalText = getData(element, "ujs:enable-with");
     if (originalText != null) {
       if (matches(element, "button")) {
@@ -386,11 +386,11 @@ Released under the MIT license
     element.disabled = false;
     return setData(element, "ujs:disabled", null);
   };
-  var isXhrRedirect = function(event) {
+  var isXhrRedirect = function (event) {
     const xhr = event.detail ? event.detail[0] : undefined;
     return xhr && xhr.getResponseHeader("X-Xhr-Redirect");
   };
-  const handleMethodWithRails = rails => function(e) {
+  const handleMethodWithRails = rails => function (e) {
     const link = this;
     const method = link.getAttribute("data-method");
     if (!method) {
@@ -417,11 +417,11 @@ Released under the MIT license
     form.querySelector('[type="submit"]').click();
     stopEverything(e);
   };
-  const isRemote = function(element) {
+  const isRemote = function (element) {
     const value = element.getAttribute("data-remote");
     return value != null && value !== "false";
   };
-  const handleRemoteWithRails = rails => function(e) {
+  const handleRemoteWithRails = rails => function (e) {
     let data, method, url;
     const element = this;
     if (!isRemote(element)) {
@@ -470,8 +470,8 @@ Released under the MIT license
       data: data,
       dataType: dataType,
       beforeSend(xhr, options) {
-        if (fire(element, "ajax:beforeSend", [ xhr, options ])) {
-          return fire(element, "ajax:send", [ xhr ]);
+        if (fire(element, "ajax:beforeSend", [xhr, options])) {
+          return fire(element, "ajax:send", [xhr]);
         } else {
           fire(element, "ajax:stopped");
           return false;
@@ -491,9 +491,9 @@ Released under the MIT license
     });
     stopEverything(e);
   };
-  const formSubmitButtonClick = function(e) {
+  const formSubmitButtonClick = function (e) {
     const button = this;
-    const {form: form} = button;
+    const { form: form } = button;
     if (!form) {
       return;
     }
@@ -507,7 +507,7 @@ Released under the MIT license
     setData(form, "ujs:submit-button-formaction", button.getAttribute("formaction"));
     return setData(form, "ujs:submit-button-formmethod", button.getAttribute("formmethod"));
   };
-  const preventInsignificantClick = function(e) {
+  const preventInsignificantClick = function (e) {
     const link = this;
     const method = (link.getAttribute("data-method") || "GET").toUpperCase();
     const data = link.getAttribute("data-params");
@@ -560,17 +560,17 @@ Released under the MIT license
   Rails.handleMethod = handleMethod;
   const handleRemote = handleRemoteWithRails(Rails);
   Rails.handleRemote = handleRemote;
-  const start = function() {
+  const start = function () {
     if (window._rails_loaded) {
       throw new Error("rails-ujs has already been loaded!");
     }
-    window.addEventListener("pageshow", (function() {
-      $(formEnableSelector).forEach((function(el) {
+    window.addEventListener("pageshow", (function () {
+      $(formEnableSelector).forEach((function (el) {
         if (getData(el, "ujs:disabled")) {
           enableElement(el);
         }
       }));
-      $(linkDisableSelector).forEach((function(el) {
+      $(linkDisableSelector).forEach((function (el) {
         if (getData(el, "ujs:disabled")) {
           enableElement(el);
         }
@@ -614,7 +614,7 @@ Released under the MIT license
       throw new Error("If you load both jquery_ujs and rails-ujs, use rails-ujs only.");
     }
     jQuery.rails = Rails;
-    jQuery.ajaxPrefilter((function(options, originalOptions, xhr) {
+    jQuery.ajaxPrefilter((function (options, originalOptions, xhr) {
       if (!options.crossDomain) {
         return CSRFProtection(xhr);
       }
