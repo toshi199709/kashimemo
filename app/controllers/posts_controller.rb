@@ -5,8 +5,13 @@ class PostsController < ApplicationController
 
 
 def index
-  @posts = Post.includes(:user).order(created_at: :desc)
+  if user_signed_in?
+    @posts = Post.includes(:user).where("is_public = ? OR user_id = ?", true, current_user.id).order(created_at: :desc)
+  else
+    @posts = Post.includes(:user).where(is_public: true).order(created_at: :desc)
+  end
 end
+
 
 
   def new
@@ -39,9 +44,13 @@ end
     redirect_to posts_path, notice: "削除しました！"
     end
 
-    def preview
-    @post = Post.find(params[:id])
-    end
+def preview
+  @post = Post.find(params[:id])
+  unless @post.is_public || (user_signed_in? && current_user == @post.user)
+    redirect_to root_path, alert: "この投稿は非公開です"
+  end
+end
+
 
 
 
@@ -52,7 +61,7 @@ end
   end
 
   def post_params
-    params.require(:post).permit(:video_url, :lyrics, :memo)
+    params.require(:post).permit(:video_url, :lyrics, :memo, :is_public)
   end
 
   def authorize_user!
