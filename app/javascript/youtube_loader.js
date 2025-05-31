@@ -7,6 +7,7 @@ document.addEventListener("turbo:load", () => {
 
   button.addEventListener("click", (e) => {
     e.preventDefault();
+    console.log("読み込みボタンがクリックされた");
     const url = input.value;
     const videoId = extractVideoId(url);
     if (videoId) {
