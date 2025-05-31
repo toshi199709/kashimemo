@@ -1,14 +1,3 @@
 <h1>🎶 歌詞とメモアプリ 🎶</h1>
 
-<% if @post.errors.any? %>
-  <div id="error_explanation">
-    <h2><%= pluralize(@post.errors.count, "件のエラー") %>があります：</h2>
-    <ul>
-      <% @post.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
-
 <%= render "form", post: @post %>
