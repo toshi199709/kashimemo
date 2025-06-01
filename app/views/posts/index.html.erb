@@ -12,6 +12,10 @@
         preview_post_path(post) %>
 
     <%= link_to link_path, style: "text-decoration: none; color: inherit; display: block;" do %>
+
+      <!-- 🎵 曲名（タイトル）を最上部に表示 -->
+      <h3 style="margin-bottom: 10px;"><%= post.title.presence || "（タイトル未入力）" %></h3>
+
       <iframe width="300" height="169"
               src="<%= youtube_embed_url(post.video_url) %>"
               frameborder="0"
