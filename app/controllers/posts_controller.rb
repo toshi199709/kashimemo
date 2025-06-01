@@ -28,12 +28,13 @@ def create
   end
 end
 
-  def edit
-  end
+def edit
+  session[:return_to] = request.referer
+end
 
 def update
   if @post.update(post_params)
-    redirect_to root_path, notice: "編集が完了しました！"
+    redirect_to(session.delete(:return_to) || posts_path, notice: "編集が完了しました！")
   else
     render :edit
   end
@@ -52,6 +53,9 @@ def preview
 end
 
 
+def mypage
+  @posts = current_user.posts.order(created_at: :asc) # 古い順に並べる
+end
 
 
   private
@@ -61,7 +65,7 @@ end
   end
 
   def post_params
-    params.require(:post).permit(:video_url, :lyrics, :memo, :is_public)
+    params.require(:post).permit(:title, :video_url, :lyrics, :memo, :is_public)
   end
 
   def authorize_user!

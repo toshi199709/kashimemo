@@ -16,7 +16,10 @@
 
     <div class="right-column">
       <div class="url-input-wrapper">
-        <%= f.label :video_url, "YouTubeのURL" %><br>
+        <%= f.label :title, "曲名（タイトル）" %>
+        <%= f.text_field :title, class: "url-input", readonly: readonly %>
+
+        <%= f.label :video_url, "YouTubeのURL" %>
         <%= f.text_field :video_url, id: "youtube-url", class: "url-input", readonly: readonly %>
 
         <% unless readonly %>
