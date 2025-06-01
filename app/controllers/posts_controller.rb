@@ -40,10 +40,11 @@ def update
   end
 end
 
-    def destroy
-    @post.destroy
-    redirect_to posts_path, notice: "削除しました！"
-    end
+def destroy
+  @post.destroy
+  redirect_to(session.delete(:return_to) || posts_path, notice: "削除しました！")
+end
+
 
 def preview
   @post = Post.find(params[:id])
