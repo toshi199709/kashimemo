@@ -28,12 +28,13 @@ def create
   end
 end
 
-  def edit
-  end
+def edit
+  session[:return_to] = request.referer
+end
 
 def update
   if @post.update(post_params)
-    redirect_to root_path, notice: "編集が完了しました！"
+    redirect_to(session.delete(:return_to) || posts_path, notice: "編集が完了しました！")
   else
     render :edit
   end
