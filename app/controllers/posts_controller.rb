@@ -52,6 +52,9 @@ def preview
 end
 
 
+def mypage
+  @posts = current_user.posts.order(created_at: :asc) # 古い順に並べる
+end
 
 
   private
@@ -61,7 +64,7 @@ end
   end
 
   def post_params
-    params.require(:post).permit(:video_url, :lyrics, :memo, :is_public)
+    params.require(:post).permit(:title, :video_url, :lyrics, :memo, :is_public)
   end
 
   def authorize_user!
