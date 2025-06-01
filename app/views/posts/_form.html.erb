@@ -37,11 +37,21 @@
       <%= f.label :is_public, "公開する" %>
       <%= f.check_box :is_public %>
     </div>
-  <% end %>
 
-  <% unless readonly %>
-    <div style="text-align: center; margin-top: 20px;">
+    <!-- ✅ ボタン3つを統一して中央に配置 -->
+    <div style="text-align: center; margin-top: 20px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+      <!-- 戻るリンク -->
+      <%= link_to "← 戻る", session[:return_to] || mypage_path, class: "load-btn" %>
+
+      <!-- 更新 or 保存ボタン -->
       <%= f.submit(post.persisted? ? "更新する" : "保存する", class: "load-btn") %>
+
+      <!-- 削除リンク（編集のときだけ） -->
+      <% if post.persisted? %>
+        <%= link_to "🗑️ 削除する", post_path(post), method: :delete,
+              data: { confirm: "本当に削除しますか？" },
+              class: "load-btn" %>
+      <% end %>
     </div>
   <% end %>
 <% end %>
