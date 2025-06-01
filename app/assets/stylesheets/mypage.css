@@ -1,0 +1,20 @@
+.mypage-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  /* 横並び＋自動折り返し */
+  gap: 20px;
+  padding: 20px;
+}
+
+.mypage-post-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+  background-color: #fefefe;
+  transition: transform 0.2s ease;
+}
+
+.mypage-post-card:hover {
+  transform: scale(1.03);
+}
