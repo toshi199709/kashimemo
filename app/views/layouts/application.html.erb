@@ -20,11 +20,13 @@
       <!-- ログイン状態によってボタン表示 -->
       <div style="position: absolute; top: 20px; right: 20px;">
         <% if user_signed_in? %>
-          ようこそ、<%= current_user.nickname %> さん |
-          <%= link_to "マイページ", mypage_path %> |
+          <%= current_user.nickname %>
+          <% unless current_page?(mypage_path) %>
+          <%= link_to "マイページ", mypage_path %>
+          <% end %> 
           <%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: { turbo: false } %>
         <% else %>
-          <%= link_to "ログイン", new_user_session_path %> |
+          <%= link_to "ログイン", new_user_session_path %> 
           <%= link_to "新規登録", new_user_registration_path %>
         <% end %>
       </div>
