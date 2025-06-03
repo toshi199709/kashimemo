@@ -3,6 +3,11 @@ class PostsController < ApplicationController
   before_action :set_post, only: [:edit, :update, :destroy]
   before_action :authorize_user!, only: [:edit, :update, :destroy]
 
+def generate_lyrics
+  url = params[:video_url]
+  lyrics = WhisperTranscriber.call(url)
+  render json: { lyrics: lyrics }
+end
 
 def index
   if user_signed_in?
