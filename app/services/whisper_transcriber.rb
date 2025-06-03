@@ -11,6 +11,7 @@ class WhisperTranscriber
     # 2. Whisperで文字起こし
     transcribe_cmd = "python3 scripts/transcribe.py #{audio_path}"
     output = `#{transcribe_cmd}`
+    puts "🎤 Whisper出力: #{output.inspect}"  # ← これ追加
 
     # 3. 結果（歌詞テキスト）を返す
     output.strip
