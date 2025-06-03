@@ -1,2 +1,6 @@
 import "@hotwired/turbo-rails"
-import "controllers"
+import "@rails/ujs"
+import "youtube_loader"
+
+import Rails from "@rails/ujs"
+Rails.start()
