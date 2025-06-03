@@ -21,9 +21,9 @@
       <div style="position: absolute; top: 20px; right: 20px;">
         <% if user_signed_in? %>
           <%= current_user.nickname %>
-<% unless controller_name == "posts" && (action_name == "mypage" || action_name == "edit") %>
-  <%= link_to "マイページ", mypage_path %>
-<% end %>
+          <% unless controller_name == "posts" && (action_name == "mypage" || action_name == "edit") %>
+          <%= link_to "マイページ", mypage_path %>
+          <% end %>
           <%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: { turbo: false } %>
         <% else %>
           <%= link_to "ログイン", new_user_session_path %> 
