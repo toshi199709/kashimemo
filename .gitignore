@@ -33,3 +33,23 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# === Python仮想環境 ===
+venv/
+.venv/
+
+# === Pythonビルド生成物 ===
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# === Whisper / 音声処理系のキャッシュやファイル ===
+*.pt
+*.mp3
+*.wav
+*.flac
+*.tmp
+.whisper_cache/
+
