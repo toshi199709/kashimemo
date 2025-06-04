@@ -35,12 +35,6 @@
   font-size: 16px;
 }
 
-.load-btn {
-  padding: 6px 12px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
 .lyrics-box,
 .memo-box {
   height: 400px;
@@ -52,10 +46,62 @@
 
 /* 一覧ページ */
 
+/* 🌌 全体背景を黒に + 文字を明るく */
+body {
+  background-color: #121212;
+  color: #f0f0f0;
+  font-family: 'Helvetica Neue', sans-serif;
+}
+
+/* 🧊 投稿カードのスタイルをダークテーマに */
 .post-card {
-  border: 1px solid #ccc;
-  padding: 15px;
-  margin-bottom: 20px;
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  border: none;
+  /* 枠線は消す or より淡い色にする */
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* 🖱️ ホバー時に浮かせる */
+.post-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(255, 255, 255, 0.1);
+}
+
+/* 🎥 iframeサイズは現状維持だが丸みを付けても◎ */
+.post-card iframe {
   border-radius: 8px;
-  background-color: #f9f9f9;
+}
+
+/* 💬 見出しやテキストのマージン調整 */
+.post-card h3 {
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+.post-card p {
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
+/* 🔗 新規投稿ボタンの強調 */
+.load-btn {
+  padding: 8px 14px;
+  font-size: 14px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.load-btn:hover {
+  background-color: #2980b9;
+}
+
+.post-card hr {
+  border-color: #333;
 }
