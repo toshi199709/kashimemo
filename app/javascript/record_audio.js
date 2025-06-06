@@ -19,10 +19,11 @@ window.startRecording = function () {
         formData.append('file', audioFile);
 
         try {
-          const response = await fetch("https://whisper-api-26ac.onrender.com", {
+          const response = await fetch("https://whisper-api-26ac.onrender.com/transcribe", {
             method: "POST",
             body: formData
           });
+
 
           const result = await response.json();
           const lyricsField = document.getElementById("lyrics_field");
