@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     end
 
     collection do
-      post :generate_lyrics   # 👈 追加：YouTube URLから歌詞を生成する
+      post :generate_lyrics   # 🎯 POST /posts/generate_lyrics にマッチするようになっている
     end
   end
 end
