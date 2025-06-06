@@ -10,9 +10,16 @@
               allowfullscreen>
       </iframe>
 
-      <%= f.label :lyrics, "歌詞" %><br>
-      <%= f.text_area :lyrics, id: "lyrics_field", class: "lyrics-box", rows: 10, readonly: readonly %>
+  <%= f.label :lyrics, "歌詞" %><br>
+  <%= f.text_area :lyrics, id: "lyrics_field", class: "lyrics-box", rows: 10, readonly: readonly %>
+
+  <% unless readonly %>
+    <div style="margin-top: 10px; display: flex; gap: 10px;">
+      <button type="button" onclick="startRecording()" class="load-btn">🎙️ 録音開始</button>
+      <button type="button" onclick="stopRecording()" class="load-btn">⏹️ 録音停止</button>
     </div>
+  <% end %>
+</div>
 
     <div class="right-column">
       <div class="url-input-wrapper">
