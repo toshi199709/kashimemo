@@ -1,0 +1,15 @@
+plugins:
+  - rubocop-rails
+  - rubocop-rspec
+
+inherit_from:
+  - .rubocop_todo.yml
+
+AllCops:
+  NewCops: enable
+  Exclude:
+    - 'bin/**/*'
+    - 'db/schema.rb'
+    - 'node_modules/**/*'
+    - 'config/**/*'
+    - 'spec/fixtures/**/*'

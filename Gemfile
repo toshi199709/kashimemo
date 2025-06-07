@@ -49,6 +49,9 @@ group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
   gem 'rspec-rails'
   gem 'factory_bot_rails'
+  gem 'rubocop', require: false
+  gem 'rubocop-rails', require: false  # Rails用ルール
+  gem 'rubocop-rspec', require: false  # RSpec用ルール
 end
 
 group :development do
