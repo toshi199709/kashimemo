@@ -11,7 +11,7 @@ class WhisperTranscriber
     if response.success?
       JSON.parse(response.body)['text']
     else
-      "文字起こしに失敗しました"
+      # "文字起こしに失敗しました"
     end
   end
 end
