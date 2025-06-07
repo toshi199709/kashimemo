@@ -23,6 +23,9 @@ end
     @post = Post.new
   end
 
+  def edit
+    session[:return_to] = request.referer
+  end
   def create
     @post = Post.new(post_params)
     @post.user = current_user
@@ -39,9 +42,6 @@ end
     end
   end
 
-  def edit
-    session[:return_to] = request.referer
-  end
 
   def update
     if @post.update(post_params)
