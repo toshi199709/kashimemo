@@ -51,5 +51,42 @@ RSpec.describe "Posts", type: :request do
 
       expect(response).to redirect_to(root_path) # 実装に応じて変更OK
     end
+
+    describe "投稿作成" do
+      before do
+        @user = FactoryBot.create(:user)
+        sign_in @user
+      end
+
+      it "必要な情報が揃っていれば投稿できる" do
+        post_params = {
+          post: {
+            title: "テスト投稿",
+            video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+            lyrics: "サンプル歌詞",
+            memo: "サンプルメモ"
+          }
+        }
+
+        expect do
+          post posts_path, params: post_params
+        end.to change(Post, :count).by(1)
+      end
+
+      it "titleが空では投稿できず、投稿数は変わらない" do
+        post_params = {
+          post: {
+            title: "",
+            video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+            lyrics: "サンプル歌詞",
+            memo: "サンプルメモ"
+          }
+        }
+
+        expect do
+          post posts_path, params: post_params
+        end.not_to change(Post, :count)
+      end
+    end
   end
 end
