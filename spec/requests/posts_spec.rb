@@ -32,5 +32,24 @@ RSpec.describe "Posts", type: :request do
       get edit_post_path(other_post)
       expect(response).to redirect_to(root_path) # ※コントローラーの実装に合わせて変更してOK
     end
+
+    it "自分の投稿であれば削除できる" do
+      post = FactoryBot.create(:post, user: @user)
+
+      expect do
+        delete post_path(post)
+      end.to change(Post, :count).by(-1)
+    end
+
+    it "他人の投稿は削除できず、投稿数は変わらない" do
+      other_user = FactoryBot.create(:user)
+      other_post = FactoryBot.create(:post, user: other_user)
+
+      expect do
+        delete post_path(other_post)
+      end.not_to change(Post, :count)
+
+      expect(response).to redirect_to(root_path) # 実装に応じて変更OK
+    end
   end
 end
