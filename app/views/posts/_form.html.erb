@@ -1,33 +1,33 @@
-<% readonly = local_assigns[:readonly] || false %>
+<% readonly = local_assigns.key?(:readonly) ? local_assigns[:readonly] : false %>
 
 <%= form_with model: post, local: true do |f| %>
   <div class="container">
     <div class="left-column">
       <iframe id="youtube-frame" width="100%" height="315"
-              src="<%= youtube_embed_url(post.video_url) %>"
+              src=""
               frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowfullscreen>
       </iframe>
 
-  <%= f.label :lyrics, "歌詞" %><br>
-  <%= f.text_area :lyrics, id: "lyrics_field", class: "lyrics-box", rows: 10, readonly: readonly %>
+      <%= f.label :lyrics, "歌詞" %><br>
+      <%= f.text_area :lyrics, id: "post_lyrics", class: "lyrics-box", rows: 10, readonly: (readonly ? true : nil) %>
 
-  <% unless readonly %>
-    <div style="margin-top: 10px; display: flex; gap: 10px;">
-      <button type="button" onclick="startAutoRecording()" class="load-btn">🎙️ 録音開始</button>
-      <button type="button" onclick="stopRecording()" class="load-btn">⏹️ 録音停止</button>
+      <% unless readonly %>
+        <div style="margin-top: 10px; display: flex; gap: 10px;">
+          <button type="button" onclick="startAutoRecording()" class="load-btn">🎙️ 録音開始</button>
+          <button type="button" onclick="stopRecording()" class="load-btn">⏹️ 録音停止</button>
+        </div>
+      <% end %>
     </div>
-  <% end %>
-</div>
 
     <div class="right-column">
       <div class="url-input-wrapper">
         <%= f.label :title, "曲名（タイトル）" %>
-        <%= f.text_field :title, class: "url-input", readonly: readonly %>
+        <%= f.text_field :title, id: "post_title", class: "url-input", readonly: (readonly ? true : nil) %>
 
         <%= f.label :video_url, "YouTubeのURL" %>
-        <%= f.text_field :video_url, id: "youtube-url", class: "url-input", readonly: readonly %>
+        <%= f.text_field :video_url, id: "post_video_url", class: "url-input", readonly: (readonly ? true : nil) %>
 
         <% unless readonly %>
           <button type="button" id="load-video-btn" class="load-btn">読み込む</button>
@@ -35,30 +35,29 @@
       </div>
 
       <%= f.label :memo, "メモ" %><br>
-      <%= f.text_area :memo, class: "memo-box", rows: 10, readonly: readonly %>
+      <%= f.text_area :memo, id: "post_memo", class: "memo-box", rows: 10, readonly: (readonly ? true : nil) %>
     </div>
   </div>
 
   <% unless readonly %>
     <div style="margin-top: 20px;">
       <%= f.label :is_public, "公開する" %>
-      <%= f.check_box :is_public %>
+      <%= f.check_box :is_public, id: "post_is_public" %>
     </div>
 
-    <!-- ✅ ボタン3つを統一して中央に配置 -->
     <div style="text-align: center; margin-top: 20px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
-      <!-- 戻るリンク -->
       <%= link_to "← 戻る", session[:return_to] || mypage_path, class: "load-btn" %>
-
-      <!-- 更新 or 保存ボタン -->
       <%= f.submit(post.persisted? ? "更新する" : "保存する", class: "load-btn") %>
 
-      <!-- 削除リンク（編集のときだけ） -->
       <% if post.persisted? %>
         <%= link_to "🗑️ 削除する", post_path(post), method: :delete,
               data: { confirm: "本当に削除しますか？" },
               class: "load-btn" %>
       <% end %>
+    </div>
+  <% else %>
+    <div style="text-align: center; margin-top: 20px;">
+      <%= link_to "← 戻る", root_path, class: "load-btn" %>
     </div>
   <% end %>
 <% end %>
