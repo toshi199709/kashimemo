@@ -8,7 +8,7 @@ class PostsController < ApplicationController
   url = params[:video_url]
   lyrics = WhisperTranscriber.call(url)
   render json: { lyrics: lyrics }
-end
+  end
 
 
   def index
