@@ -30,7 +30,7 @@ RSpec.describe "Posts", type: :request do
       other_post = FactoryBot.create(:post, user: other_user)
 
       get edit_post_path(other_post)
-      expect(response).to redirect_to(root_path) # ※コントローラーの実装に合わせて変更してOK
+      expect(response).to redirect_to(root_path)
     end
 
     it "自分の投稿であれば削除できる" do
@@ -49,15 +49,10 @@ RSpec.describe "Posts", type: :request do
         delete post_path(other_post)
       end.not_to change(Post, :count)
 
-      expect(response).to redirect_to(root_path) # 実装に応じて変更OK
+      expect(response).to redirect_to(root_path)
     end
 
     describe "投稿作成" do
-      before do
-        @user = FactoryBot.create(:user)
-        sign_in @user
-      end
-
       it "必要な情報が揃っていれば投稿できる" do
         post_params = {
           post: {
