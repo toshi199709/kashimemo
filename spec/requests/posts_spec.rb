@@ -18,5 +18,19 @@ RSpec.describe "Posts", type: :request do
       get new_post_path
       expect(response).to have_http_status(:success)
     end
+
+    it "自分の投稿であれば編集ページにアクセスできる" do
+      post = FactoryBot.create(:post, user: @user)
+      get edit_post_path(post)
+      expect(response).to have_http_status(:success)
+    end
+
+    it "他人の投稿には編集ページにアクセスできず、リダイレクトされる" do
+      other_user = FactoryBot.create(:user)
+      other_post = FactoryBot.create(:post, user: other_user)
+
+      get edit_post_path(other_post)
+      expect(response).to redirect_to(root_path) # ※コントローラーの実装に合わせて変更してOK
+    end
   end
 end
