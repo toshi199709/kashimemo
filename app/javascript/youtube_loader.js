@@ -2,9 +2,9 @@ console.log("✅ youtube_loader.js 実行開始！");
 
 document.addEventListener("turbo:load", () => {
   const button = document.getElementById("load-video-btn");
-  const input = document.getElementById("youtube-url");
+  const input = document.getElementById("post_video_url"); // ← 修正済み
   const iframe = document.getElementById("youtube-frame");
-  const lyricsField = document.getElementById("lyrics_field");
+  const lyricsField = document.getElementById("post_lyrics"); // ← 念のため確認
 
   if (!button || !input || !iframe || !lyricsField) return;
 
@@ -38,7 +38,7 @@ document.addEventListener("turbo:load", () => {
       });
 
       const data = await res.json();
-      console.log("🎤 取得したデータ:", data); // ← これ追加！
+      console.log("🎤 取得したデータ:", data);
       lyricsField.value = data.lyrics;
     } catch (err) {
       console.error(err);
