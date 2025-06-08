@@ -31,7 +31,7 @@ end
     @post.user = current_user
 
     if @post.save
-      if @post.audio_file.attached?
+      if @post.respond_to?(:audio_file) && @post.audio_file.attached?
         lyrics = WhisperTranscriber.call(@post.audio_file.blob)
         @post.update(lyrics: lyrics)
       end
@@ -41,6 +41,7 @@ end
       render :new
     end
   end
+
 
 
   def update
