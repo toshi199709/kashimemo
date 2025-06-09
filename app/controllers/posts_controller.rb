@@ -4,11 +4,22 @@ class PostsController < ApplicationController
   before_action :authorize_user!, only: [:edit, :update, :destroy]
 
   def index
+    @sort = params[:sort]
+
     if user_signed_in?
-      @posts = Post.includes(:user).where("is_public = ? OR user_id = ?", true, current_user.id).order(created_at: :desc)
+      base_scope = Post.includes(:user).where("is_public = ? OR posts.user_id = ?", true, current_user.id)
     else
-      @posts = Post.includes(:user).where(is_public: true).order(created_at: :desc)
+      base_scope = Post.includes(:user).where(is_public: true)
     end
+
+    @posts = case @sort
+             when 'likes'
+               base_scope.left_joins(:likes)
+                         .group('posts.id')
+                         .order('COUNT(likes.id) DESC')
+             else
+               base_scope.order(created_at: :desc)
+             end
   end
 
   def new
