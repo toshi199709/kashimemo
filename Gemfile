@@ -74,4 +74,3 @@ end
 
 gem 'devise'
 gem "sassc-rails"
-gem 'httparty'
