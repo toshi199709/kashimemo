@@ -1,0 +1,19 @@
+<div id="<%= dom_id(post, :like_button) %>">
+  <% if user_signed_in? %>
+    <% if post.likes.exists?(user: current_user) %>
+      <%= button_to post_like_path(post, post.likes.find_by(user: current_user)),
+                    method: :delete,
+                    form: { data: { turbo_stream: true }, style: "display:inline;" },
+                    class: "btn btn-primary btn-sm" do %>
+        👍 <%= post.likes_count %>
+      <% end %>
+    <% else %>
+      <%= button_to post_likes_path(post),
+                    method: :post,
+                    form: { data: { turbo_stream: true }, style: "display:inline;" },
+                    class: "btn btn-outline-primary btn-sm" do %>
+        👍 <%= post.likes_count %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
