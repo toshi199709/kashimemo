@@ -1,0 +1,44 @@
+<h2>マイページ背景の変更</h2>
+
+<%= form_with model: @user, url: background_path, method: :patch, local: true, html: { multipart: true } do |f| %>
+  <div style="margin-bottom: 20px;">
+    <%= f.label :background_image, "背景画像をアップロード" %><br>
+    <%= f.file_field :background_image %>
+
+    <% if @user.background_image.attached? %>
+      <p>現在の画像：</p>
+      <%= image_tag @user.background_image.variant(resize_to_limit: [300, 200]).processed %>
+    <% end %>
+  </div>
+
+  <div style="margin-bottom: 20px;">
+    <%= f.label :background_opacity, "背景の透過度（1〜100%）" %><br>
+    <%= f.range_field :background_opacity, in: 1..100, step: 1, id: "opacity_slider" %>
+    <%= f.number_field :background_opacity, in: 1..100, step: 1, id: "opacity_number" %>%
+  </div>
+
+  <div>
+    <%= f.submit "更新する", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<!-- ✅ 連動スクリプト：フォームのすぐ下に配置 -->
+<script>
+  (function () {
+    const slider = document.getElementById("opacity_slider");
+    const number = document.getElementById("opacity_number");
+
+    if (!slider || !number) return;
+
+    // 初期同期
+    slider.value = number.value;
+
+    slider.addEventListener("input", () => {
+      number.value = slider.value;
+    });
+
+    number.addEventListener("input", () => {
+      slider.value = number.value;
+    });
+  })();
+</script>
