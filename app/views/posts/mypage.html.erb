@@ -7,6 +7,12 @@
   <div class="mypage-background-wrapper">
 <% end %>
 
+  <!-- ✅ 背景設定ボタン -->
+  <div style="text-align: right; margin-bottom: 20px;">
+    <%= link_to "背景を変更する", edit_background_path,
+                style: "padding: 6px 12px; border: 1px solid #007bff; color: #007bff; border-radius: 6px; text-decoration: none;" %>
+  </div>
+
   <div class="mypage-grid">
     <% @posts.each do |post| %>
       <div class="mypage-post-card">
