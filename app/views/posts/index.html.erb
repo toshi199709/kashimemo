@@ -1,9 +1,18 @@
+<%# 新規投稿ボタン（ログイン時） %>
 <% if user_signed_in? %>
-  <div style="text-align: left; margin-bottom: 20px;">
+  <div style="text-align: left; margin-bottom: 10px;">
     <%= link_to "＋ 新しい投稿を作成する", new_post_path, class: "load-btn" %>
   </div>
 <% end %>
 
+<%# 並び替えリンク（右上配置） %>
+<div style="text-align: right; margin: 10px 0 20px;">
+  <%= link_to "新着順", posts_path(sort: nil), class: (@sort == "likes" ? "sort-link" : "sort-link active") %>
+  |
+  <%= link_to "いいね順", posts_path(sort: "likes"), class: (@sort == "likes" ? "sort-link active" : "sort-link") %>
+</div>
+
+<%# 投稿一覧のループ表示 %>
 <% @posts.each do |post| %>
   <div class="post-card" style="margin-bottom: 30px;">
     <%= link_to (user_signed_in? && current_user == post.user ? edit_post_path(post) : preview_post_path(post)),
@@ -19,7 +28,7 @@
               <%= post.title.presence || "（タイトル未入力）" %>
             </h3>
 
-            <!-- 👍 ここだけリンク遷移を止める -->
+            <!-- 👍 いいねボタン：リンク遷移防止 -->
             <div onclick="event.stopPropagation();">
               <%= render "posts/like_button", post: post %>
             </div>
