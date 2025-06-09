@@ -53,3 +53,5 @@ dist/
 *.tmp
 .whisper_cache/
 
+# Whisper scripts
+scripts/
