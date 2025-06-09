@@ -5,23 +5,33 @@
 <% end %>
 
 <% @posts.each do |post| %>
-  <% link_path =
-      user_signed_in? && current_user == post.user ?
-      edit_post_path(post) :
-      preview_post_path(post) %>
+  <div class="post-card" style="margin-bottom: 30px;">
+    <%= link_to (user_signed_in? && current_user == post.user ? edit_post_path(post) : preview_post_path(post)),
+                style: "text-decoration: none; color: inherit; display: block;" do %>
 
-  <%= link_to link_path, style: "text-decoration: none; color: inherit; display: block;" do %>
-    <div class="post-card" style="margin-bottom: 30px;">
       <div class="post-content" style="display: flex; gap: 20px;">
         <!-- 左：動画とタイトル -->
         <div class="left-column" style="flex: 1;">
-          <h3 style="margin-bottom: 10px;"><%= post.title.presence || "（タイトル未入力）" %></h3>
+
+          <!-- タイトルといいねを横並び -->
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin-bottom: 10px;">
+              <%= post.title.presence || "（タイトル未入力）" %>
+            </h3>
+
+            <!-- 👍 ここだけリンク遷移を止める -->
+            <div onclick="event.stopPropagation();">
+              <%= render "posts/like_button", post: post %>
+            </div>
+          </div>
+
           <iframe width="100%" height="169"
                   src="<%= youtube_embed_url(post.video_url) %>"
                   frameborder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowfullscreen>
           </iframe>
+
           <p><strong>投稿者:</strong> <%= post.user.nickname %></p>
         </div>
 
@@ -39,6 +49,6 @@
           </p>
         </div>
       </div>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
 <% end %>

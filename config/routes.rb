@@ -10,7 +10,10 @@ Rails.application.routes.draw do
     end
 
     collection do
-      post :generate_lyrics   # 🎯 POST /posts/generate_lyrics にマッチするようになっている
+      post :generate_lyrics
     end
+
+    # ✅ いいね機能をネストで追加
+    resources :likes, only: [:create, :destroy]
   end
 end
