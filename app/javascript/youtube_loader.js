@@ -4,11 +4,10 @@ document.addEventListener("turbo:load", () => {
   const button = document.getElementById("load-video-btn");
   const input = document.getElementById("post_video_url"); // ← 修正済み
   const iframe = document.getElementById("youtube-frame");
-  const lyricsField = document.getElementById("post_lyrics"); // ← 念のため確認
 
-  if (!button || !input || !iframe || !lyricsField) return;
+  if (!button || !input || !iframe) return;
 
-  button.addEventListener("click", async (e) => {
+  button.addEventListener("click", (e) => {
     e.preventDefault();
     console.log("🎬 読み込みボタンがクリックされた");
 
@@ -24,29 +23,6 @@ document.addEventListener("turbo:load", () => {
     }
 
     iframe.src = `https://www.youtube.com/embed/${videoId}`;
-    button.disabled = true;
-    button.innerText = "読み込み中…";
-
-    try {
-      const res = await fetch("/posts/generate_lyrics", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content
-        },
-        body: JSON.stringify({ video_url: url })
-      });
-
-      const data = await res.json();
-      console.log("🎤 取得したデータ:", data);
-      lyricsField.value = data.lyrics;
-    } catch (err) {
-      console.error(err);
-      alert("歌詞生成に失敗しました");
-    } finally {
-      button.disabled = false;
-      button.innerText = "読み込む";
-    }
   });
 
   function extractVideoId(url) {

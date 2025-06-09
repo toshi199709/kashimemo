@@ -3,14 +3,6 @@ class PostsController < ApplicationController
   before_action :set_post, only: [:edit, :update, :destroy]
   before_action :authorize_user!, only: [:edit, :update, :destroy]
 
-
-  def generate_lyrics
-  url = params[:video_url]
-  lyrics = WhisperTranscriber.call(url)
-  render json: { lyrics: lyrics }
-  end
-
-
   def index
     if user_signed_in?
       @posts = Post.includes(:user).where("is_public = ? OR user_id = ?", true, current_user.id).order(created_at: :desc)
@@ -31,18 +23,11 @@ class PostsController < ApplicationController
     @post.user = current_user
 
     if @post.save
-      if @post.respond_to?(:audio_file) && @post.audio_file.attached?
-        lyrics = WhisperTranscriber.call(@post.audio_file.blob)
-        @post.update(lyrics: lyrics)
-      end
-
       redirect_to posts_path, notice: '投稿を保存しました！'
     else
       render :new
     end
   end
-
-
 
   def update
     if @post.update(post_params)
@@ -75,7 +60,7 @@ class PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:title, :video_url, :audio_file, :lyrics, :memo, :is_public)
+    params.require(:post).permit(:title, :video_url, :lyrics, :memo, :is_public)
   end
 
   def authorize_user!
