@@ -16,6 +16,11 @@ class UsersController < ApplicationController
     end
   end
 
+  def remove_background_image
+    current_user.background_image.purge
+    redirect_to edit_background_path, notice: "背景画像を削除しました。"
+  end
+
   private
 
   def user_params

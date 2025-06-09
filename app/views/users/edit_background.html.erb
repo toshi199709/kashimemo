@@ -1,26 +1,46 @@
-<h2>マイページ背景の変更</h2>
+<h2 style="text-align: center; margin-bottom: 20px;">マイページ背景の変更</h2>
 
-<%= form_with model: @user, url: background_path, method: :patch, local: true, html: { multipart: true } do |f| %>
-  <div style="margin-bottom: 20px;">
-    <%= f.label :background_image, "背景画像をアップロード" %><br>
-    <%= f.file_field :background_image %>
+<div style="max-width: 500px; margin: 0 auto;">
+  <%= form_with model: @user, url: background_path, method: :patch, local: true, html: { multipart: true } do |f| %>
+    <div style="margin-bottom: 20px;">
+      <%= f.label :background_image, "背景画像をアップロード" %><br>
+      <%= f.file_field :background_image, id: "background_image_input" %>
+    </div>
 
     <% if @user.background_image.attached? %>
-      <p>現在の画像：</p>
-      <%= image_tag @user.background_image.variant(resize_to_limit: [300, 200]).processed %>
+      <div style="text-align: center; margin-bottom: 20px;">
+        <p>現在の画像：</p>
+        <%= image_tag @user.background_image.variant(resize_to_limit: [300, 200]).processed,
+                      id: "background_preview",
+                      style: "border: 1px solid #ccc;" %>
+      </div>
     <% end %>
-  </div>
 
-  <div style="margin-bottom: 20px;">
-    <%= f.label :background_opacity, "背景の透過度（1〜100%）" %><br>
-    <%= f.range_field :background_opacity, in: 1..100, step: 1, id: "opacity_slider" %>
-    <%= f.number_field :background_opacity, in: 1..100, step: 1, id: "opacity_number" %>%
-  </div>
+    <div style="margin-bottom: 20px;">
+      <%= f.label :background_opacity, "背景の透過度（1〜100%）" %><br>
+      <%= f.range_field :background_opacity, in: 1..100, step: 1, id: "opacity_slider" %>
+      <%= f.number_field :background_opacity, in: 1..100, step: 1, id: "opacity_number" %>% 
+    </div>
 
-  <div>
-    <%= f.submit "更新する", class: "btn btn-primary" %>
-  </div>
-<% end %>
+    <!-- ✅ 更新＋削除ボタンを横並びに配置 -->
+    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;">
+      <%= f.submit "更新する", class: "btn btn-primary", style: "width: 160px;" %>
+
+      <!-- 削除ボタンだけ別フォーム -->
+      <%= form_with url: remove_background_image_user_path, method: :delete, local: true do %>
+        <button type="submit"
+                class="btn btn-danger"
+                style="width: 160px;"
+                data-confirm="本当に削除しますか？">
+          背景画像を削除
+        </button>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+
+
 
 <!-- ✅ 連動スクリプト：フォームのすぐ下に配置 -->
 <script>
