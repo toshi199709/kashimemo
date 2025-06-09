@@ -2,28 +2,38 @@ console.log("✅ youtube_loader.js 実行開始！");
 
 document.addEventListener("turbo:load", () => {
   const button = document.getElementById("load-video-btn");
-  const input = document.getElementById("post_video_url"); // ← 修正済み
+  const input = document.getElementById("post_video_url");
   const iframe = document.getElementById("youtube-frame");
 
-  if (!button || !input || !iframe) return;
+  if (!input || !iframe) return;
 
-  button.addEventListener("click", (e) => {
-    e.preventDefault();
-    console.log("🎬 読み込みボタンがクリックされた");
+  // ⭐ 初期表示時にURLが入っていたら動画表示
+  const initialUrl = input.value;
+  const initialVideoId = extractVideoId(initialUrl);
+  if (initialVideoId) {
+    iframe.src = `https://www.youtube.com/embed/${initialVideoId}`;
+  }
 
-    const url = input.value;
-    const videoId = extractVideoId(url);
+  // ⭐ ボタン押下時に動画を表示
+  if (button) {
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      console.log("🎬 読み込みボタンがクリックされた");
 
-    console.log("🎯 入力されたURL:", url);
-    console.log("🎯 抽出されたvideoId:", videoId);
+      const url = input.value;
+      const videoId = extractVideoId(url);
 
-    if (!videoId) {
-      alert("正しいYouTubeのURLを入力してください");
-      return;
-    }
+      console.log("🎯 入力されたURL:", url);
+      console.log("🎯 抽出されたvideoId:", videoId);
 
-    iframe.src = `https://www.youtube.com/embed/${videoId}`;
-  });
+      if (!videoId) {
+        alert("正しいYouTubeのURLを入力してください");
+        return;
+      }
+
+      iframe.src = `https://www.youtube.com/embed/${videoId}`;
+    });
+  }
 
   function extractVideoId(url) {
     const reg = /(?:https?:\/\/)?(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([a-zA-Z0-9_-]{11})/;
