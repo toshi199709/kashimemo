@@ -1,7 +1,11 @@
-// 既存のカスタムスタイル
+// Bootstrap（SCSS版）を最初に読み込む
+@import "bootstrap";
+
+// 自作スタイル（順序大事！Bootstrapの上書きが効くように後に書く）
 @import "application";
 @import "mypage";
 
+// カスタムスタイル
 .kashimemo-logo {
   font-size: 2.2rem;
   font-weight: 700;
