@@ -30,5 +30,13 @@ RSpec.describe Like, type: :model do
       another_like.valid?
       expect(another_like.errors.full_messages).to include("User has already been taken")
     end
+
+    describe 'アソシエーションのテスト' do
+      it 'userとpostに属していること' do
+        like = FactoryBot.create(:like)
+        expect(like.user).to be_present
+        expect(like.post).to be_present
+      end
+    end
   end
 end
