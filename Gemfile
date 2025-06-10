@@ -52,6 +52,7 @@ group :development, :test do
   gem 'rubocop', require: false
   gem 'rubocop-rails', require: false  # Rails用ルール
   gem 'rubocop-rspec', require: false  # RSpec用ルール
+  gem 'dotenv-rails'
 end
 
 group :development do
