@@ -4,6 +4,7 @@ class User < ApplicationRecord
          
   has_many :posts, dependent: :destroy
   has_many :likes, dependent: :destroy
+  has_one_attached :background_image
   validates :nickname, presence: true
 
   validate :password_complexity

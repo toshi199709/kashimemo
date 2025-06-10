@@ -13,7 +13,13 @@ Rails.application.routes.draw do
       post :generate_lyrics
     end
 
-    # ✅ いいね機能をネストで追加
     resources :likes, only: [:create, :destroy]
   end
+
+  # ✅ 背景画像関連のルート
+  resource :user, only: [] do
+    delete :remove_background_image, on: :collection, as: :remove_background_image
+  end
+
+  patch 'users/background', to: 'users#update_background', as: :background
 end
