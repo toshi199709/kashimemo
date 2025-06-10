@@ -16,11 +16,10 @@ Rails.application.routes.draw do
     resources :likes, only: [:create, :destroy]
   end
 
-resource :user, only: [] do
-  delete :remove_background_image, on: :collection, as: :remove_background_image
-end
+  # ✅ 背景画像関連のルート
+  resource :user, only: [] do
+    delete :remove_background_image, on: :collection, as: :remove_background_image
+  end
 
-  # ✅ 背景画像編集（コントローラー統合）
-  get 'users/background/edit', to: 'users#edit_background', as: :edit_background
   patch 'users/background', to: 'users#update_background', as: :background
 end

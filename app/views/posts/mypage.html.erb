@@ -8,17 +8,52 @@
 <% end %>
 
   <!-- ✅ 背景設定ボタン -->
-  <div style="text-align: right; margin-bottom: 20px;">
-    <%= link_to "背景を変更する", edit_background_path,
-                style: "padding: 6px 12px; border: 1px solid #007bff; color: #007bff; border-radius: 6px; text-decoration: none;" %>
+  <div style="text-align: right; margin-bottom: 10px;">
+<button id="toggle-background-settings"
+        class="btn btn-outline-light"
+        data-turbo="false"
+        style="padding: 4px 10px; border-radius: 6px;">
+  背景を設定する
+</button>
+
   </div>
 
+  <!-- ✅ 背景設定フォーム（初期状態は hidden クラスで非表示） -->
+  <div id="background-settings-form" class="hidden"
+       style="max-width: 500px; margin: 0 auto 30px; padding: 20px; background: #fff; border-radius: 8px;">
+    <%= form_with model: current_user, url: background_path, method: :patch,
+              data: { turbo: false },
+              local: true, html: { multipart: true } do |f| %>
+
+      <div style="margin-bottom: 15px;">
+        <%= f.label :background_image, "背景画像をアップロード" %><br>
+        <%= f.file_field :background_image %>
+      </div>
+
+      <div style="margin-bottom: 15px;">
+        <%= f.label :background_opacity, "背景の透過度（1〜100%）" %><br>
+        <%= f.range_field :background_opacity, in: 1..100, step: 1, id: "opacity_slider" %>
+        <%= f.number_field :background_opacity, in: 1..100, step: 1, id: "opacity_number" %>% 
+      </div>
+
+      <div style="display: flex; justify-content: center; gap: 10px;">
+        <%= f.submit "更新する", class: "btn btn-primary", style: "width: 160px;" %>
+        <%= button_tag "背景画像を削除",
+              type: "submit",
+              name: "remove_background",
+              class: "btn btn-danger",
+              data: { confirm: "本当に削除しますか？" },
+              style: "width: 160px;" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- 投稿一覧 -->
   <div class="mypage-grid">
     <% @posts.each do |post| %>
       <div class="mypage-post-card">
         <%= link_to edit_post_path(post) do %>
           <h3><%= post.title.presence || "（タイトル未入力）" %></h3>
-
           <% youtube_id = youtube_video_id(post.video_url) %>
           <% if youtube_id.present? %>
             <%= image_tag "https://img.youtube.com/vi/#{youtube_id}/hqdefault.jpg", width: 200 %>
@@ -30,3 +65,30 @@
     <% end %>
   </div>
 </div>
+
+<style>
+  .hidden {
+    display: none;
+  }
+</style>
+
+<script>
+  document.addEventListener("turbo:load", () => {
+    const toggleBtn = document.getElementById("toggle-background-settings");
+    const form = document.getElementById("background-settings-form");
+
+    if (toggleBtn && form) {
+      toggleBtn.addEventListener("click", () => {
+        form.classList.toggle("hidden");
+      });
+    }
+
+    const slider = document.getElementById("opacity_slider");
+    const number = document.getElementById("opacity_number");
+
+    if (slider && number) {
+      slider.addEventListener("input", () => number.value = slider.value);
+      number.addEventListener("input", () => slider.value = number.value);
+    }
+  });
+</script>

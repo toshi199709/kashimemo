@@ -1,24 +1,21 @@
-# app/controllers/users_controller.rb
-
 class UsersController < ApplicationController
   before_action :authenticate_user!
 
-  def edit_background
-    @user = current_user
-  end
-
   def update_background
     @user = current_user
+
+    if params[:remove_background]
+      @user.background_image.purge
+      flash[:notice] = "背景画像を削除しました。"
+      redirect_to mypage_path and return
+    end
+
     if @user.update(user_params)
       redirect_to mypage_path, notice: "背景を更新しました！"
     else
-      render :edit_background
+      flash.now[:alert] = "背景の更新に失敗しました。"
+      render :mypage
     end
-  end
-
-  def remove_background_image
-    current_user.background_image.purge
-    redirect_to edit_background_path, notice: "背景画像を削除しました。"
   end
 
   private
