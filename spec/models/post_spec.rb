@@ -42,4 +42,14 @@ RSpec.describe Post, type: :model do
       expect(@post.errors.full_messages).to include("User must exist")
     end
   end
+
+  describe 'アソシエーションのテスト' do
+    it 'postを削除すると関連するlikeも削除される' do
+      post = FactoryBot.create(:post)
+      user = FactoryBot.create(:user)
+      FactoryBot.create(:like, user: user, post: post)
+
+      expect { post.destroy }.to change { Like.count }.by(-1)
+    end
+  end
 end
