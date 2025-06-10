@@ -25,10 +25,14 @@
               data: { turbo: false },
               local: true, html: { multipart: true } do |f| %>
 
-      <div style="margin-bottom: 15px;">
-        <%= f.label :background_image, "背景画像をアップロード" %><br>
-        <%= f.file_field :background_image %>
-      </div>
+<div style="margin-bottom: 15px;">
+  <%= f.label :background_image, "背景画像をアップロード" %><br>
+  <%= f.file_field :background_image %>
+  <p style="font-size: 13px; color: #666; margin-top: 4px;">
+    ※横1920px以上の画像を推奨（画質が荒くなるのを防ぐため）
+  </p>
+</div>
+
 
       <div style="margin-bottom: 15px;">
         <%= f.label :background_opacity, "背景の透過度（1〜100%）" %><br>
