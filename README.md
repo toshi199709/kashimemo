@@ -1,24 +1,155 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# アプリケーション名
 
-Things you may want to cover:
+**Kashimemo（歌詞メモ）**
 
-* Ruby version
+---
 
-* System dependencies
+## アプリケーション概要
 
-* Configuration
+YouTube動画に合わせて歌詞と自分のメモを記録・整理できるWebアプリ。  
+ユーザーは投稿を作成し、公開・非公開を設定しながら、曲の歌詞やメモを自分だけの形で保存できる。  
+いいね機能やマイページの背景カスタマイズ機能など、個人の記録を楽しく続けられる工夫も実装。
 
-* Database creation
+---
 
-* Database initialization
+## URL
 
-* How to run the test suite
+https://kashimemo.onrender.com
 
-* Services (job queues, cache servers, search engines, etc.)
 
-* Deployment instructions
 
-* ...
+---
+
+## テスト用アカウント
+
+- Basic認証ID：`xxxx`
+- Basic認証PASS：`xxxx`
+- メールアドレス：`nick@nick`
+- パスワード：`nick29`
+
+---
+
+## 利用方法
+
+### ✅ 投稿を作成する
+1. ヘッダーから「＋新しい投稿を作成」をクリック
+2. YouTubeのURL・タイトル・歌詞・メモを入力
+3. 投稿の公開/非公開を選択して保存
+
+### ✅ マイページ機能
+- 投稿一覧を古い順で表示
+- 公開・非公開問わず自分の投稿をすべて確認可能
+- 背景画像や透過度の設定で見た目をカスタマイズ可能
+
+### ✅ いいね機能
+- 投稿一覧から「いいね」ボタンでリアクション
+- いいね順 / 新着順 の並び替えが可能
+
+---
+
+## アプリケーションを作成した背景
+
+自分の好きな音楽に関して「歌詞をメモして残したい」「気づきや感じたことも一緒に保存したい」というニーズに応えるため、  
+YouTube動画とテキスト情報（歌詞＋メモ）を連携させて保存できる仕組みを開発。  
+また、背景画像や透過度などのカスタマイズにより、ユーザーの世界観を表現できるページ構成を目指した。
+
+---
+
+## 実装した機能
+
+- Deviseによるユーザー認証
+- YouTube動画埋め込み表示
+- 歌詞とメモの投稿・編集・削除
+- 投稿の公開/非公開切り替え
+- いいね機能（いいね順・投稿順ソート）
+- マイページの背景画像アップロード＆透過度調整
+- テスト（モデル、リクエスト、背景設定のリクエストまで網羅）
+
+---
+
+## 今後追加予定の機能
+
+- タグによる投稿分類
+- コメント機能
+- SNS連携による外部共有
+
+---
+
+## データベース設計
+
+※RailsのER図 or Markdownで表現（図があるなら画像として貼り付け）
+
+
+
+
+---
+
+## 画面遷移図
+
+※draw.ioなどで作った図を画像で貼る or Markdownで簡易表現
+
+---
+
+## 開発環境
+
+- フロントエンド：HTML / CSS / JS（Importmap）
+- バックエンド：Ruby on Rails
+- インフラ：Render（PostgreSQL）
+- テスト：RSpec / FactoryBot / Capybara
+- その他：Devise, ActiveStorage
+
+---
+
+## ローカルでの動作方法
+
+```bash
+git clone https://github.com/yourname/kashimemo.git
+cd kashimemo
+bundle install
+rails db:create db:migrate
+rails server
+
+
+## 工夫したポイント
+
+- **ユーザー体験を意識したUI設計**  
+  歌詞とメモを分けて入力・閲覧しやすくしたレイアウト、背景カスタマイズ機能による個性の表現を実現。
+  
+- **Importmapによる軽量なJS構成**  
+  Webpackerを使わずにImportmapで必要なJSだけを読み込み、環境構築を簡素化。
+
+- **ログイン後のマイページ充実化**  
+  投稿を公開・非公開問わず管理し、背景画像＋透過度設定で“自分だけの空間”を作れるようにした。
+
+- **RSpecによるテスト駆動開発**  
+  モデル／リクエストテストで堅牢性を確保。背景画像や透過度の操作まで網羅。
+
+- **タスク管理**  
+  GitHub Projectsとブランチ運用を併用し、着手・レビュー・完了の流れを整理。
+
+---
+
+## 改善点
+
+- **UIの改善**  
+  スマホでの操作性向上のため、メモ欄や動画表示のレスポンシブ対応を追加したい。  
+  → BootstrapまたはTailwind CSS導入を検討。
+
+- **エラー時のフィードバック向上**  
+  バリデーションエラーをフィールドごとに表示するなど、UX改善に着手予定。
+
+- **検索・タグ機能の導入**  
+  投稿数が増えたときのために、タグ付け＋絞り込み検索機能を実装予定。
+
+---
+
+## 制作時間
+
+- **総制作時間：約100時間**
+  - 設計・画面モック：10時間  
+  - 実装（投稿・いいね・背景機能）：45時間  
+  - 歌詞自動生成機能❌：20時間  
+  - テスト実装：15時間  
+  - デバッグ・微調整：10時間
