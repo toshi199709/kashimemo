@@ -72,5 +72,34 @@ end
       @user.valid?
       expect(@user.errors.full_messages).to include("Password confirmation doesn't match Password")
     end
+
+    describe '背景画像と透過度の設定' do
+      it '背景画像がアタッチされると有効' do
+        user = FactoryBot.build(:user)
+        user.background_image.attach(
+          io: File.open(Rails.root.join('spec/fixtures/files/sample.jpg')),
+          filename: 'sample.jpg',
+          content_type: 'image/jpeg'
+        )
+        expect(user.background_image).to be_attached
+      end
+
+  it '透過度が1〜100の範囲であれば有効' do
+    user = FactoryBot.build(:user, background_opacity: 50)
+    expect(user).to be_valid
+  end
+
+  it '透過度が1未満だと無効' do
+    user = FactoryBot.build(:user, background_opacity: 0)
+    user.valid?
+    expect(user.errors.full_messages).to include("Background opacity must be greater than or equal to 1")
+  end
+
+  it '透過度が100を超えると無効' do
+    user = FactoryBot.build(:user, background_opacity: 101)
+    user.valid?
+    expect(user.errors.full_messages).to include("Background opacity must be less than or equal to 100")
+  end
+    end
   end
 end
