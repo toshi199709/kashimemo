@@ -5,14 +5,14 @@
                     method: :delete,
                     form: { data: { turbo_stream: true }, style: "display:inline;" },
                     class: "btn btn-primary btn-sm" do %>
-        👍 <%= post.likes_count %>
+        👍 <%= post.likes.count %>
       <% end %>
     <% else %>
       <%= button_to post_likes_path(post),
                     method: :post,
                     form: { data: { turbo_stream: true }, style: "display:inline;" },
                     class: "btn btn-outline-primary btn-sm" do %>
-        👍 <%= post.likes_count %>
+        👍 <%= post.likes.count %>
       <% end %>
     <% end %>
   <% end %>
