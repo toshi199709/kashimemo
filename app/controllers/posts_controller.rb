@@ -70,8 +70,21 @@ class PostsController < ApplicationController
   end
 
   def mypage
-    @posts = current_user.posts.order(created_at: :asc)
-  end
+   @filter = params[:filter]
+
+   posts = current_user.posts
+
+   case @filter
+   when "public"
+     posts = posts.where(is_public: true)
+   when "private"
+     posts = posts.where(is_public: false)
+   end
+
+   @posts = posts.order(created_at: :desc)
+ end
+
+
 
   private
 
