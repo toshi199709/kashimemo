@@ -9,6 +9,7 @@
 
   <!-- ✅ 背景設定ボタン -->
 <div style="text-align: right; margin-bottom: 10px;">
+  <%= link_to "全て表示", mypage_path, class: "btn btn-outline-light", style: "padding: 4px 10px; border-radius: 6px; margin-right: 8px;" %>
   <%= link_to "公開", mypage_path(filter: "public"), class: "btn btn-outline-light", style: "padding: 4px 10px; border-radius: 6px; margin-right: 8px;" %>
   <%= link_to "非公開", mypage_path(filter: "private"), class: "btn btn-outline-light", style: "padding: 4px 10px; border-radius: 6px; margin-right: 12px;" %>
 
@@ -19,6 +20,7 @@
     背景を設定する
   </button>
 </div>
+
 
 
   <!-- ✅ 背景設定フォーム（初期状態は hidden クラスで非表示） -->

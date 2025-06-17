@@ -82,7 +82,7 @@ class PostsController < ApplicationController
    end
 
    @posts = posts.order(created_at: :desc)
- end
+  end
 
 
 
