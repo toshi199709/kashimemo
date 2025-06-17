@@ -5,11 +5,19 @@
   </div>
 <% end %>
 
-<%# 並び替えリンク（右上配置） %>
-<div style="text-align: right; margin: 10px 0 20px;">
-  <%= link_to "新着順", posts_path(sort: nil), class: (@sort == "likes" ? "sort-link" : "sort-link active") %>
+<%# カテゴリ + 並び替えリンク（右寄せで横並び） %>
+<div style="display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin: 10px 0 20px;">
+  <%= form_with url: posts_path, method: :get, local: true do %>
+    <%= select_tag :category_id,
+          options_for_select(Category.all.map { |c| [c.name, c.id] }, selected: params[:category_id]),
+          prompt: "カテゴリを選択", onchange: "this.form.submit();" %>
+    <%# このhidden_fieldでsortのパラメータも維持（カテゴリ絞ってからソート可能に） %>
+    <%= hidden_field_tag :sort, params[:sort] %>
+  <% end %>
+
+  <%= link_to "新着順", posts_path(sort: nil, category_id: params[:category_id]), class: (@sort == "likes" ? "sort-link" : "sort-link active") %>
   |
-  <%= link_to "いいね順", posts_path(sort: "likes"), class: (@sort == "likes" ? "sort-link active" : "sort-link") %>
+  <%= link_to "いいね順", posts_path(sort: "likes", category_id: params[:category_id]), class: (@sort == "likes" ? "sort-link active" : "sort-link") %>
 </div>
 
 <%# 投稿一覧のループ表示 %>
