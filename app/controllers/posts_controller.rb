@@ -71,7 +71,7 @@ class PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:title, :video_url, :lyrics, :memo, :is_public)
+    params.require(:post).permit(:title, :video_url, :lyrics, :memo, :is_public, :category_id)
   end
 
   def authorize_user!
