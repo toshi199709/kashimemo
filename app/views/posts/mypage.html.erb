@@ -8,15 +8,18 @@
 <% end %>
 
   <!-- ✅ 背景設定ボタン -->
-  <div style="text-align: right; margin-bottom: 10px;">
-<button id="toggle-background-settings"
-        class="btn btn-outline-light"
-        data-turbo="false"
-        style="padding: 4px 10px; border-radius: 6px;">
-  背景を設定する
-</button>
+<div style="text-align: right; margin-bottom: 10px;">
+  <%= link_to "公開", mypage_path(filter: "public"), class: "btn btn-outline-light", style: "padding: 4px 10px; border-radius: 6px; margin-right: 8px;" %>
+  <%= link_to "非公開", mypage_path(filter: "private"), class: "btn btn-outline-light", style: "padding: 4px 10px; border-radius: 6px; margin-right: 12px;" %>
 
-  </div>
+  <button id="toggle-background-settings"
+          class="btn btn-outline-light"
+          data-turbo="false"
+          style="padding: 4px 10px; border-radius: 6px;">
+    背景を設定する
+  </button>
+</div>
+
 
   <!-- ✅ 背景設定フォーム（初期状態は hidden クラスで非表示） -->
   <div id="background-settings-form" class="hidden"
