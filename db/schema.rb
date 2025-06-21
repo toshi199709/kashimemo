@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_06_17_030344) do
+ActiveRecord::Schema[7.1].define(version: 2025_06_21_232150) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -52,6 +52,26 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_17_030344) do
     t.index ["user_id"], name: "index_likes_on_user_id"
   end
 
+  create_table "playlist_items", force: :cascade do |t|
+    t.bigint "playlist_id", null: false
+    t.bigint "post_id", null: false
+    t.text "lyrics"
+    t.text "memo"
+    t.boolean "user_post_flag"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["playlist_id"], name: "index_playlist_items_on_playlist_id"
+    t.index ["post_id"], name: "index_playlist_items_on_post_id"
+  end
+
+  create_table "playlists", force: :cascade do |t|
+    t.string "name"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_playlists_on_user_id"
+  end
+
   create_table "posts", force: :cascade do |t|
     t.string "video_url"
     t.text "lyrics"
@@ -86,5 +106,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_17_030344) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "likes", "posts"
   add_foreign_key "likes", "users"
+  add_foreign_key "playlist_items", "playlists"
+  add_foreign_key "playlist_items", "posts"
+  add_foreign_key "playlists", "users"
   add_foreign_key "posts", "users"
 end
