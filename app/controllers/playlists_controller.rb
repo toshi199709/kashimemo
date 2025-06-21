@@ -1,14 +1,17 @@
 class PlaylistsController < ApplicationController
+  before_action :authenticate_user!
+
   def index
+    @playlists = current_user.playlists
   end
 
   def new
   end
 
-  def create
+  def edit
   end
 
-  def edit
+  def create
   end
 
   def update
