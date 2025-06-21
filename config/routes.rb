@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  get 'playlists/index'
+  get 'playlists/new'
+  get 'playlists/create'
+  get 'playlists/edit'
+  get 'playlists/update'
+  get 'playlists/destroy'
   devise_for :users
 
   root to: 'posts#index'
