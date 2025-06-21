@@ -27,5 +27,10 @@ Rails.application.routes.draw do
     delete :remove_background_image, on: :collection, as: :remove_background_image
   end
 
+  resources :playlists do
+  resources :playlist_items, only: [:create, :update, :destroy]
+end
+
+
   patch 'users/background', to: 'users#update_background', as: :background
 end
