@@ -19,4 +19,19 @@ document.addEventListener("turbo:load", () => {
       playlistModal.show();
     });
   });
+  // 🎵 ★ ここがポイント！フォームsubmit成功時にモーダルを閉じる✨
+  const playlistForm = document.querySelector("#playlistModal form");
+  if (playlistForm) {
+    playlistForm.addEventListener("ajax:success", (event) => {
+      console.log("✅ プレイリスト作成成功 → モーダル閉じる");
+
+      const modalElement = document.getElementById("playlistModal");
+      const modalInstance = Modal.getInstance(modalElement);
+      modalInstance.hide();
+    });
+
+    playlistForm.addEventListener("ajax:error", (event) => {
+      console.log("⚠️ プレイリスト作成失敗", event);
+    });
+  }
 });

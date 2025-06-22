@@ -1,0 +1,12 @@
+<turbo-stream action="remove" target="playlistModal"></turbo-stream>
+
+<turbo-stream action="append" target="playlists-list">
+  <template>
+    <div class="mypage-post-card">
+      <%= link_to playlist_path(@playlist) do %>
+        <h3><%= @playlist.name %></h3>
+        <p>作成日: <%= l(@playlist.created_at, format: :short) %></p>
+      <% end %>
+    </div>
+  </template>
+</turbo-stream>

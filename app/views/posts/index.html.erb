@@ -84,27 +84,29 @@
 <div class="modal fade" id="playlistModal" tabindex="-1" aria-labelledby="playlistModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="/playlists" method="post">
-        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-        <input type="hidden" name="post_id" id="playlist_post_id">
+<%= form_with url: playlists_path, method: :post, local: false do %>
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  <input type="hidden" name="post_id" id="playlist_post_id">
 
-        <div class="modal-header">
-          <h5 class="modal-title" id="playlistModalLabel">プレイリストを作成</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
-        </div>
+  <div class="modal-header">
+    <h5 class="modal-title" id="playlistModalLabel">プレイリストを作成</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+  </div>
 
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="playlist_name" class="form-label">プレイリスト名</label>
-            <input type="text" name="playlist[name]" id="playlist_name" class="form-control" required>
-          </div>
-        </div>
+  <div class="modal-body">
+    <div class="mb-3">
+      <label for="playlist_name" class="form-label">プレイリスト名</label>
+      <input type="text" name="playlist[name]" id="playlist_name" class="form-control" required>
+    </div>
+  </div>
 
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-          <button type="submit" class="btn btn-primary">作成する</button>
-        </div>
-      </form>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+    <button type="submit" class="btn btn-primary">作成する</button>
+  </div>
+
+<% end %>  <!-- ← これが必要！ -->
+
     </div>
   </div>
 </div>

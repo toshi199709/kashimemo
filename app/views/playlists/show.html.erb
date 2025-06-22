@@ -1,0 +1,22 @@
+<h1><%= @playlist.name %></h1>
+
+<% if @playlist_items.any? %>
+  <div class="mypage-grid">
+    <% @playlist_items.each do |item| %>
+      <% post = item.post %>
+      <div class="mypage-post-card">
+        <%= link_to preview_post_path(post) do %>
+          <h3><%= post.title.presence || "（タイトル未入力）" %></h3>
+          <% youtube_id = youtube_video_id(post.video_url) %>
+          <% if youtube_id.present? %>
+            <%= image_tag "https://img.youtube.com/vi/#{youtube_id}/hqdefault.jpg", width: 200 %>
+          <% else %>
+            <p>サムネイルを取得できませんでした</p>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p>プレイリストに投稿はまだありません</p>
+<% end %>

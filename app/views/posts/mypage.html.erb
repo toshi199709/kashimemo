@@ -73,6 +73,19 @@
       </div>
     <% end %>
   </div>
+  <h2>マイプレイリスト</h2>
+
+<div class="mypage-grid">
+  <% @playlists.each do |playlist| %>
+    <div class="mypage-post-card">
+      <%= link_to playlist_path(playlist) do %>
+        <h3><%= playlist.name %></h3>
+        <p>作成日: <%= l(playlist.created_at, format: :short) %></p>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
 </div>
 
 <style>
