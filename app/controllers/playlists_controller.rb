@@ -6,6 +6,8 @@ class PlaylistsController < ApplicationController
   end
 
   def new
+    @playlist = Playlist.new
+    @post_id = params[:post_id]
   end
 
   def edit
