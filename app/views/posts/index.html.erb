@@ -11,7 +11,6 @@
     <%= select_tag :category_id,
           options_for_select(Category.all.map { |c| [c.name, c.id] }, selected: params[:category_id]),
           prompt: "カテゴリを選択", onchange: "this.form.submit();" %>
-    <%# このhidden_fieldでsortのパラメータも維持（カテゴリ絞ってからソート可能に） %>
     <%= hidden_field_tag :sort, params[:sort] %>
   <% end %>
 
@@ -23,33 +22,32 @@
 <%# 投稿一覧のループ表示 %>
 <% @posts.each do |post| %>
   <div class="post-card" style="position: relative; margin-bottom: 30px; padding-right: 50px;">
-<%= link_to '+', new_playlist_path(post_id: post.id), 
-    class: 'btn btn-sm btn-outline-primary add-to-playlist-btn',
-    style: 'position: absolute; top: 10px; right: 10px; z-index: 10; border-radius: 50%; width: 32px; height: 32px; padding: 0; line-height: 30px; text-align: center;' %>
+
+    <%= link_to '+', '#',
+        class: 'btn btn-sm btn-outline-primary add-to-playlist-btn',
+        data: { "post-id": post.id },
+        style: 'position: absolute; top: 10px; right: 10px; z-index: 10; border-radius: 50%; width: 32px; height: 32px; padding: 0; line-height: 30px; text-align: center;' %>
+
     <%= link_to (user_signed_in? && current_user == post.user ? edit_post_path(post) : preview_post_path(post)),
                 style: "text-decoration: none; color: inherit; display: block;" do %>
 
       <div class="post-content" style="display: flex; gap: 20px;">
         <!-- 左：動画とタイトル -->
         <div class="left-column" style="flex: 1;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <h3 style="margin-bottom: 5px;">
+                <%= post.title.presence || "（タイトル未入力）" %>
+              </h3>
+              <p style="margin-top: 0; font-size: 0.9em;">
+                <strong></strong> <%= post.category.name if post.category.present? %>
+              </p>
+            </div>
 
-<!-- タイトルといいねを横並び -->
-<div style="display: flex; justify-content: space-between; align-items: center;">
-  <div>
-    <h3 style="margin-bottom: 5px;">
-      <%= post.title.presence || "（タイトル未入力）" %>
-    </h3>
-    <p style="margin-top: 0; font-size: 0.9em;">
-      <strong></strong> <%= post.category.name if post.category.present? %>
-    </p>
-  </div>
-
-  <!-- 👍 いいねボタン：リンク遷移防止 -->
-  <div onclick="event.stopPropagation();">
-    <%= render "posts/like_button", post: post %>
-  </div>
-</div>
-
+            <div onclick="event.stopPropagation();">
+              <%= render "posts/like_button", post: post %>
+            </div>
+          </div>
 
           <iframe width="100%" height="169"
                   src="<%= youtube_embed_url(post.video_url) %>"
@@ -75,6 +73,38 @@
           </p>
         </div>
       </div>
+
     <% end %>
   </div>
 <% end %>
+
+<%# ⭐⭐⭐ ← この下に Modal HTML を入れる ⭐⭐⭐ %>
+
+<!-- プレイリスト作成用モーダル -->
+<div class="modal fade" id="playlistModal" tabindex="-1" aria-labelledby="playlistModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="/playlists" method="post">
+        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+        <input type="hidden" name="post_id" id="playlist_post_id">
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="playlistModalLabel">プレイリストを作成</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="playlist_name" class="form-label">プレイリスト名</label>
+            <input type="text" name="playlist[name]" id="playlist_name" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+          <button type="submit" class="btn btn-primary">作成する</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
