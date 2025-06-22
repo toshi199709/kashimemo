@@ -23,8 +23,8 @@
 <%# 投稿一覧のループ表示 %>
 <% @posts.each do |post| %>
   <div class="post-card" style="position: relative; margin-bottom: 30px; padding-right: 50px;">
-<%= link_to '+', '#', class: 'btn btn-sm btn-outline-primary add-to-playlist-btn',
-    data: { post_id: post.id },
+<%= link_to '+', new_playlist_path(post_id: post.id), 
+    class: 'btn btn-sm btn-outline-primary add-to-playlist-btn',
     style: 'position: absolute; top: 10px; right: 10px; z-index: 10; border-radius: 50%; width: 32px; height: 32px; padding: 0; line-height: 30px; text-align: center;' %>
     <%= link_to (user_signed_in? && current_user == post.user ? edit_post_path(post) : preview_post_path(post)),
                 style: "text-decoration: none; color: inherit; display: block;" do %>
