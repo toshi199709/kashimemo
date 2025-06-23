@@ -5,6 +5,8 @@
     <% @playlist_items.each do |item| %>
       <% post = item.post %>
       <div class="mypage-post-card">
+
+        <!-- 投稿リンク部分 -->
         <%= link_to preview_post_path(post) do %>
           <h3><%= post.title.presence || "（タイトル未入力）" %></h3>
           <% youtube_id = youtube_video_id(post.video_url) %>
@@ -14,9 +16,27 @@
             <p>サムネイルを取得できませんでした</p>
           <% end %>
         <% end %>
+
+        <!-- ⭐️ 削除ボタンはリンクの外に！ -->
+        <div style="margin-top: 8px;">
+          <%= link_to "削除", playlist_item_path(item),
+                      method: :delete,
+                      data: { confirm: "この投稿をプレイリストから削除しますか？" },
+                      class: "btn btn-sm btn-danger" %>
+        </div>
+
       </div>
     <% end %>
   </div>
 <% else %>
   <p>プレイリストに投稿はまだありません</p>
 <% end %>
+
+<!-- プレイリスト削除ボタン -->
+<div style="margin: 20px 0;">
+  <%= link_to "このプレイリストを削除", playlist_path(@playlist),
+              method: :delete,
+              data: { confirm: "このプレイリストを完全に削除します。よろしいですか？" },
+              class: "btn btn-danger" %>
+</div>
+

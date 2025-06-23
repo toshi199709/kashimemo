@@ -40,6 +40,11 @@ class PlaylistsController < ApplicationController
   end
 
   def destroy
+    playlist = current_user.playlists.find(params[:id])
+    playlist.destroy
+
+    flash[:notice] = "プレイリストを削除しました！"
+    redirect_to mypage_path
   end
 
   private

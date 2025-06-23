@@ -33,4 +33,18 @@ class PlaylistItemsController < ApplicationController
       format.html { redirect_to posts_path, notice: "プレイリストに追加しました！" }
     end
   end
+
+  def destroy
+    item = PlaylistItem.find(params[:id])
+
+    # 🎵 もし current_user のプレイリストじゃなかったら弾く（セキュリティ）
+    if item.playlist.user_id == current_user.id
+      item.destroy
+      flash[:notice] = "プレイリストから投稿を削除しました！"
+    else
+      flash[:alert] = "権限がありません"
+    end
+
+    redirect_to playlist_path(item.playlist)
+  end
 end
