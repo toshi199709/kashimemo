@@ -70,19 +70,21 @@ class PostsController < ApplicationController
   end
 
   def mypage
-   @filter = params[:filter]
+    @filter = params[:filter]
 
-   posts = current_user.posts
+    posts = current_user.posts
 
-   case @filter
-   when "public"
-     posts = posts.where(is_public: true)
-   when "private"
-     posts = posts.where(is_public: false)
-   end
+    case @filter
+    when "public"
+      posts = posts.where(is_public: true)
+    when "private"
+      posts = posts.where(is_public: false)
+    end
 
-   @posts = posts.order(created_at: :desc)
+    @posts = posts.order(created_at: :desc)
+    @playlists = current_user.playlists.order(created_at: :desc) # ← ⭐️ これを追加
   end
+
 
 
 

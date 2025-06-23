@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  get 'playlists/index'
+  get 'playlists/new'
+  get 'playlists/create'
+  get 'playlists/edit'
+  get 'playlists/update'
+  get 'playlists/destroy'
   devise_for :users
 
   root to: 'posts#index'
@@ -20,6 +26,15 @@ Rails.application.routes.draw do
   resource :user, only: [] do
     delete :remove_background_image, on: :collection, as: :remove_background_image
   end
+
+resources :playlists do
+  resources :playlist_items, only: [:create, :update, :destroy]
+end
+
+# ⭐️ 追加
+resources :playlist_items, only: [:create, :destroy]
+
+
 
   patch 'users/background', to: 'users#update_background', as: :background
 end
