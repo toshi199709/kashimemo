@@ -1,56 +1,58 @@
 .mypage-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  /* 横並び＋自動折り返し */
   gap: 20px;
   padding: 20px;
 }
 
 .mypage-post-card {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
   text-align: center;
-  background-color: #fefefe;
-  transition: transform 0.2s ease;
+  background-color: rgba(30, 30, 30, 0.85);
+  color: #fff;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
 }
 
 .mypage-post-card:hover {
-  transform: scale(1.03);
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
 }
 
-// 背景
+/* 背景 */
 .mypage-background-wrapper {
   position: relative;
   z-index: 0;
   min-height: 100vh;
   padding: 80px 20px 20px;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-size: cover;
-    background-position: top center; // ← ここを「top」に！
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    z-index: -1;
-    opacity: var(--background-opacity, 1);
-    background-image: var(--background-image);
-  }
 }
 
-/* ⭐️⭐️⭐️ ここに追記 ⭐️⭐️⭐️ */
+.mypage-background-wrapper::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-position: top center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  z-index: -1;
+  opacity: var(--background-opacity, 1);
+  background-image: var(--background-image);
+}
 
+/* プレイリストのサムネイル */
 .playlist-thumbnails {
   position: relative;
-  width: 200px;
-  height: 150px;
+  width: 100%;
+  padding-top: 56.25%;
   overflow: hidden;
-  margin: 0 auto 10px;
+  border-radius: 8px;
 }
 
 .playlist-thumbnails .thumbnail-image {
@@ -60,28 +62,43 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+  z-index: 0;
 }
 
-/* 背景 */
-.mypage-background-wrapper {
-  position: relative;
-  z-index: 0;
-  min-height: 100vh;
-  padding: 80px 20px 20px;
+.playlist-thumbnails .thumbnail-image.active {
+  opacity: 1;
+  z-index: 1;
+}
 
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-size: cover;
-    background-position: top center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    z-index: -1;
-    opacity: var(--background-opacity, 1);
-    background-image: var(--background-image);
-  }
+/* 投稿タイトル */
+.mypage-post-card h3 {
+  color: #fff;
+  font-size: 1.5em;
+  font-weight: bold;
+  text-decoration: none;
+  margin-bottom: 10px;
+}
+
+.mypage-post-card:hover h3 {
+  color: #66d9ff;
+}
+
+/* タイトルリンク */
+.mypage-post-card h3 a {
+  color: #fff;
+  text-decoration: none !important;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.mypage-post-card h3 a:hover {
+  color: #66d9ff;
+  text-decoration: underline;
+}
+
+/* ⭐️ h3の外側のaタグにも下線消し */
+.mypage-post-card a {
+  text-decoration: none !important;
 }
