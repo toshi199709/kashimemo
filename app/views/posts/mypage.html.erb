@@ -75,16 +75,31 @@
   </div>
   <h2>マイプレイリスト</h2>
 
-<div class="mypage-grid">
+<div id="playlists-list" class="mypage-grid">
   <% @playlists.each do |playlist| %>
     <div class="mypage-post-card">
       <%= link_to playlist_path(playlist) do %>
         <h3><%= playlist.name %></h3>
-        <p>作成日: <%= l(playlist.created_at, format: :short) %></p>
+
+        <!-- 🎵 複数サムネイル画像を埋め込む -->
+        <div class="playlist-thumbnails" data-playlist-id="<%= playlist.id %>">
+          <% playlist.posts.each_with_index do |post, index| %>
+            <% youtube_id = youtube_video_id(post.video_url) %>
+            <% if youtube_id.present? %>
+              <%= image_tag "https://img.youtube.com/vi/#{youtube_id}/hqdefault.jpg",
+                  class: "thumbnail-image",
+                  data: { index: index },
+                  style: (index == 0 ? "" : "display: none;" ) %>
+            <% end %>
+          <% end %>
+        </div>
+
+        <p style="font-size: 0.8em;">作成日: <%= l(playlist.created_at, format: :short) %></p>
       <% end %>
     </div>
   <% end %>
 </div>
+
 
 </div>
 

@@ -80,33 +80,44 @@
 
 <%# ⭐⭐⭐ ← この下に Modal HTML を入れる ⭐⭐⭐ %>
 
-<!-- プレイリスト作成用モーダル -->
+<!-- 🎵 プレイリスト作成 or 追加 モーダル -->
 <div class="modal fade" id="playlistModal" tabindex="-1" aria-labelledby="playlistModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-<%= form_with url: playlists_path, method: :post, local: false do %>
-  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-  <input type="hidden" name="post_id" id="playlist_post_id">
+<%= form_with url: playlist_items_path, method: :post, id: "playlist-add-form", local: false do %>
+        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+        <input type="hidden" name="post_id" id="playlist_post_id">
 
-  <div class="modal-header">
-    <h5 class="modal-title" id="playlistModalLabel">プレイリストを作成</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
-  </div>
+        <div class="modal-header">
+          <h5 class="modal-title" id="playlistModalLabel">プレイリストに追加</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+        </div>
 
-  <div class="modal-body">
-    <div class="mb-3">
-      <label for="playlist_name" class="form-label">プレイリスト名</label>
-      <input type="text" name="playlist[name]" id="playlist_name" class="form-control" required>
-    </div>
-  </div>
+        <div class="modal-body">
+          <!-- 🎵 新規作成欄 -->
+          <div class="mb-3">
+            <label for="new_playlist_name" class="form-label">新しいプレイリスト名（任意）</label>
+            <input type="text" name="new_playlist_name" id="new_playlist_name" class="form-control">
+          </div>
 
-  <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-    <button type="submit" class="btn btn-primary">作成する</button>
-  </div>
+          <!-- 🎵 既存プレイリスト選択 -->
+          <div class="mb-3">
+            <label for="existing_playlist_id" class="form-label">既存のプレイリスト</label>
+            <select name="existing_playlist_id" id="existing_playlist_id" class="form-select">
+              <option value="">-- 選択してください --</option>
+              <% current_user.playlists.each do |playlist| %>
+                <option value="<%= playlist.id %>"><%= playlist.name %></option>
+              <% end %>
+            </select>
+          </div>
+        </div>
 
-<% end %>  <!-- ← これが必要！ -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+          <button type="submit" class="btn btn-primary">追加する</button>
+        </div>
 
+      <% end %>
     </div>
   </div>
 </div>

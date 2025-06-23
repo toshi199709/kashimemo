@@ -22,20 +22,17 @@ class PlaylistsController < ApplicationController
     @playlist = current_user.playlists.build(playlist_params)
 
     if @playlist.save
-      if params[:post_id].present?
-        PlaylistItem.create!(
-          playlist: @playlist,
-          post_id: params[:post_id],
-          user_post_flag: current_user.posts.exists?(id: params[:post_id])
-        )
-      end
-
+      flash[:notice] = "プレイリストを作成しました！"
       respond_to do |format|
-        format.js # ★ JS版で返す
+        format.js # 作成モーダル用
         format.html { redirect_to posts_path, notice: "プレイリストを作成しました！" }
       end
     else
-      render :new
+      flash[:alert] = "プレイリストの作成に失敗しました"
+      respond_to do |format|
+        format.js
+        format.html { redirect_to posts_path, alert: "プレイリストの作成に失敗しました" }
+      end
     end
   end
 
