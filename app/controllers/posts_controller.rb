@@ -7,24 +7,24 @@ class PostsController < ApplicationController
     @sort = params[:sort]
     @category_id = params[:category_id]
 
-    # 公開・非公開の絞り込み（ログイン状態で分岐）
     if user_signed_in?
       base_scope = Post.includes(:user).where("is_public = ? OR posts.user_id = ?", true, current_user.id)
     else
       base_scope = Post.includes(:user).where(is_public: true)
     end
 
-    # さらにカテゴリで絞り込み（選択されていれば）
-    if @category_id.present?
-      base_scope = base_scope.where(category_id: @category_id)
+    # カテゴリで絞り込み
+    base_scope = base_scope.where(category_id: @category_id) if @category_id.present?
+
+    # 🔍 検索語で絞り込み
+    if params[:query].present?
+      base_scope = base_scope.where("title LIKE :q", q: "%#{params[:query]}%")
     end
 
-    # 並び替え処理
+    # 並び替え
     @posts = case @sort
              when 'likes'
-               base_scope.left_joins(:likes)
-                         .group('posts.id')
-                         .order('COUNT(likes.id) DESC')
+               base_scope.left_joins(:likes).group('posts.id').order('COUNT(likes.id) DESC')
              else
                base_scope.order(created_at: :desc)
              end
