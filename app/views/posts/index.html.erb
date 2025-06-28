@@ -8,20 +8,19 @@
     <% end %>
   </div>
 
-<% if user_signed_in? %>
-  <div style="display: flex; justify-content: center; margin-top: 20px; margin-bottom: 20px;">
-    <%= form_with url: posts_path, method: :get, local: true, html: {
-      style: "display: flex; gap: 10px; align-items: center; margin-left: 120px;"
-    } do |form| %>
-      <%= form.text_field :query, value: params[:query], placeholder: "キーワードで検索", style: "width: 300px; padding: 6px; border-radius: 5px;" %>
-      <%= form.submit "検索", style: "padding: 6px 12px;" %>
-      <%= hidden_field_tag :category_id, params[:category_id] %>
-      <%= hidden_field_tag :sort, params[:sort] %>
-    <% end %>
-  </div>
-<% end %>
-
-
+  <%# 中央：検索フォーム（ログイン時のみ） %>
+  <% if user_signed_in? %>
+    <div style="display: flex; justify-content: center; margin-top: 20px; margin-bottom: 20px;">
+      <%= form_with url: posts_path, method: :get, local: true, html: {
+        style: "display: flex; gap: 10px; align-items: center; margin-left: 120px;"
+      } do |form| %>
+        <%= form.text_field :query, value: params[:query], placeholder: "キーワードで検索", style: "width: 300px; padding: 6px; border-radius: 5px;" %>
+        <%= form.submit "検索", style: "padding: 6px 12px;" %>
+        <%= hidden_field_tag :category_id, params[:category_id] %>
+        <%= hidden_field_tag :sort, params[:sort] %>
+      <% end %>
+    </div>
+  <% end %>
 
   <%# 右：カテゴリと並び替え %>
   <div style="display: flex; align-items: center; gap: 10px;">
@@ -38,68 +37,68 @@
   </div>
 </div>
 
+<%# ✅ 投稿一覧 or 該当なしメッセージ %>
+<% if @posts.empty? %>
+  <p style="text-align: center; color: #999; font-size: 1.1em; margin-top: 40px;">
+    該当する投稿は見つかりませんでした。
+  </p>
+<% else %>
+  <% @posts.each do |post| %>
+    <div class="post-card" style="position: relative; margin-bottom: 30px; padding-right: 50px;">
 
-<%# 投稿一覧のループ表示 %>
-<% @posts.each do |post| %>
-  <div class="post-card" style="position: relative; margin-bottom: 30px; padding-right: 50px;">
+      <%= link_to '+', '#',
+          class: 'btn btn-sm btn-outline-primary add-to-playlist-btn',
+          data: { "post-id": post.id },
+          style: 'position: absolute; top: 10px; right: 10px; z-index: 10; border-radius: 50%; width: 32px; height: 32px; padding: 0; line-height: 30px; text-align: center;' %>
 
-    <%= link_to '+', '#',
-        class: 'btn btn-sm btn-outline-primary add-to-playlist-btn',
-        data: { "post-id": post.id },
-        style: 'position: absolute; top: 10px; right: 10px; z-index: 10; border-radius: 50%; width: 32px; height: 32px; padding: 0; line-height: 30px; text-align: center;' %>
+      <%= link_to (user_signed_in? && current_user == post.user ? edit_post_path(post) : preview_post_path(post)),
+                  style: "text-decoration: none; color: inherit; display: block;" do %>
 
-    <%= link_to (user_signed_in? && current_user == post.user ? edit_post_path(post) : preview_post_path(post)),
-                style: "text-decoration: none; color: inherit; display: block;" do %>
+        <div class="post-content" style="display: flex; gap: 20px;">
+          <!-- 左：動画とタイトル -->
+          <div class="left-column" style="flex: 1;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <h3 style="margin-bottom: 5px;">
+                  <%= post.title.presence || "（タイトル未入力）" %>
+                </h3>
+                <p style="margin-top: 0; font-size: 0.9em;">
+                  <strong></strong> <%= post.category.name if post.category.present? %>
+                </p>
+              </div>
 
-      <div class="post-content" style="display: flex; gap: 20px;">
-        <!-- 左：動画とタイトル -->
-        <div class="left-column" style="flex: 1;">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-              <h3 style="margin-bottom: 5px;">
-                <%= post.title.presence || "（タイトル未入力）" %>
-              </h3>
-              <p style="margin-top: 0; font-size: 0.9em;">
-                <strong></strong> <%= post.category.name if post.category.present? %>
-              </p>
+              <div onclick="event.stopPropagation();">
+                <%= render "posts/like_button", post: post %>
+              </div>
             </div>
 
-            <div onclick="event.stopPropagation();">
-              <%= render "posts/like_button", post: post %>
-            </div>
+            <iframe width="100%" height="169"
+                    src="<%= youtube_embed_url(post.video_url) %>"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+            </iframe>
+
+            <p><strong>投稿者:</strong> <%= post.user.nickname %></p>
           </div>
 
-          <iframe width="100%" height="169"
-                  src="<%= youtube_embed_url(post.video_url) %>"
-                  frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen>
-          </iframe>
+          <!-- 中央：歌詞 -->
+          <div class="center-column" style="flex: 1;">
+            <p><%= truncate(post.lyrics, length: 100) %></p>
+          </div>
 
-          <p><strong>投稿者:</strong> <%= post.user.nickname %></p>
+          <!-- 右：メモ -->
+          <div class="right-column" style="flex: 1;">
+            <p><%= truncate(post.memo, length: 100) %></p>
+          </div>
         </div>
-
-        <!-- 中央：歌詞 -->
-        <div class="center-column" style="flex: 1;">
-          <p>
-            <%= truncate(post.lyrics, length: 100) %>
-          </p>
-        </div>
-
-        <!-- 右：メモ -->
-        <div class="right-column" style="flex: 1;">
-          <p>
-            <%= truncate(post.memo, length: 100) %>
-          </p>
-        </div>
-      </div>
-
-    <% end %>
-  </div>
+      <% end %>
+    </div>
+  <% end %>
 <% end %>
 
+<%# 🎵 プレイリストモーダル（ログイン中のみ） %>
 <% if user_signed_in? %>
-  <!-- 🎵 プレイリスト作成 or 追加 モーダル -->
   <div class="modal fade" id="playlistModal" tabindex="-1" aria-labelledby="playlistModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -113,13 +112,11 @@
           </div>
 
           <div class="modal-body">
-            <!-- 🎵 新規作成欄 -->
             <div class="mb-3">
               <label for="new_playlist_name" class="form-label">新しいプレイリスト名（任意）</label>
               <input type="text" name="new_playlist_name" id="new_playlist_name" class="form-control">
             </div>
 
-            <!-- 🎵 既存プレイリスト選択 -->
             <div class="mb-3">
               <label for="existing_playlist_id" class="form-label">既存のプレイリスト</label>
               <select name="existing_playlist_id" id="existing_playlist_id" class="form-select">
