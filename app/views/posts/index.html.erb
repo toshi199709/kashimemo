@@ -1,23 +1,43 @@
-<%# 新規投稿ボタン（ログイン時） %>
+<%# 上部操作バー：横並び（全体） %>
+<div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0; flex-wrap: wrap; gap: 10px;">
+  
+  <%# 左：新規投稿ボタン（ログイン時のみ） %>
+  <div>
+    <% if user_signed_in? %>
+      <%= link_to "＋ 新しい投稿を作成する", new_post_path, class: "load-btn" %>
+    <% end %>
+  </div>
+
 <% if user_signed_in? %>
-  <div style="text-align: left; margin-bottom: 10px;">
-    <%= link_to "＋ 新しい投稿を作成する", new_post_path, class: "load-btn" %>
+  <div style="display: flex; justify-content: center; margin-top: 20px; margin-bottom: 20px;">
+    <%= form_with url: posts_path, method: :get, local: true, html: {
+      style: "display: flex; gap: 10px; align-items: center; margin-left: 120px;"
+    } do |form| %>
+      <%= form.text_field :query, value: params[:query], placeholder: "キーワードで検索", style: "width: 300px; padding: 6px; border-radius: 5px;" %>
+      <%= form.submit "検索", style: "padding: 6px 12px;" %>
+      <%= hidden_field_tag :category_id, params[:category_id] %>
+      <%= hidden_field_tag :sort, params[:sort] %>
+    <% end %>
   </div>
 <% end %>
 
-<%# カテゴリ + 並び替えリンク（右寄せで横並び） %>
-<div style="display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin: 10px 0 20px;">
-  <%= form_with url: posts_path, method: :get, local: true do %>
-    <%= select_tag :category_id,
-          options_for_select(Category.all.map { |c| [c.name, c.id] }, selected: params[:category_id]),
-          prompt: "カテゴリを選択", onchange: "this.form.submit();" %>
-    <%= hidden_field_tag :sort, params[:sort] %>
-  <% end %>
 
-  <%= link_to "新着順", posts_path(sort: nil, category_id: params[:category_id]), class: (@sort == "likes" ? "sort-link" : "sort-link active") %>
-  |
-  <%= link_to "いいね順", posts_path(sort: "likes", category_id: params[:category_id]), class: (@sort == "likes" ? "sort-link active" : "sort-link") %>
+
+  <%# 右：カテゴリと並び替え %>
+  <div style="display: flex; align-items: center; gap: 10px;">
+    <%= form_with url: posts_path, method: :get, local: true do %>
+      <%= select_tag :category_id,
+            options_for_select(Category.all.map { |c| [c.name, c.id] }, selected: params[:category_id]),
+            prompt: "カテゴリを選択", onchange: "this.form.submit();" %>
+      <%= hidden_field_tag :sort, params[:sort] %>
+    <% end %>
+
+    <%= link_to "新着順", posts_path(sort: nil, category_id: params[:category_id]), class: (@sort == "likes" ? "sort-link" : "sort-link active") %>
+    |
+    <%= link_to "いいね順", posts_path(sort: "likes", category_id: params[:category_id]), class: (@sort == "likes" ? "sort-link active" : "sort-link") %>
+  </div>
 </div>
+
 
 <%# 投稿一覧のループ表示 %>
 <% @posts.each do |post| %>
@@ -78,46 +98,45 @@
   </div>
 <% end %>
 
-<%# ⭐⭐⭐ ← この下に Modal HTML を入れる ⭐⭐⭐ %>
+<% if user_signed_in? %>
+  <!-- 🎵 プレイリスト作成 or 追加 モーダル -->
+  <div class="modal fade" id="playlistModal" tabindex="-1" aria-labelledby="playlistModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <%= form_with url: playlist_items_path, method: :post, id: "playlist-add-form", local: false do %>
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+          <input type="hidden" name="post_id" id="playlist_post_id">
 
-<!-- 🎵 プレイリスト作成 or 追加 モーダル -->
-<div class="modal fade" id="playlistModal" tabindex="-1" aria-labelledby="playlistModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-<%= form_with url: playlist_items_path, method: :post, id: "playlist-add-form", local: false do %>
-        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-        <input type="hidden" name="post_id" id="playlist_post_id">
-
-        <div class="modal-header">
-          <h5 class="modal-title" id="playlistModalLabel">プレイリストに追加</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
-        </div>
-
-        <div class="modal-body">
-          <!-- 🎵 新規作成欄 -->
-          <div class="mb-3">
-            <label for="new_playlist_name" class="form-label">新しいプレイリスト名（任意）</label>
-            <input type="text" name="new_playlist_name" id="new_playlist_name" class="form-control">
+          <div class="modal-header">
+            <h5 class="modal-title" id="playlistModalLabel">プレイリストに追加</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
           </div>
 
-          <!-- 🎵 既存プレイリスト選択 -->
-          <div class="mb-3">
-            <label for="existing_playlist_id" class="form-label">既存のプレイリスト</label>
-            <select name="existing_playlist_id" id="existing_playlist_id" class="form-select">
-              <option value="">-- 選択してください --</option>
-              <% current_user.playlists.each do |playlist| %>
-                <option value="<%= playlist.id %>"><%= playlist.name %></option>
-              <% end %>
-            </select>
+          <div class="modal-body">
+            <!-- 🎵 新規作成欄 -->
+            <div class="mb-3">
+              <label for="new_playlist_name" class="form-label">新しいプレイリスト名（任意）</label>
+              <input type="text" name="new_playlist_name" id="new_playlist_name" class="form-control">
+            </div>
+
+            <!-- 🎵 既存プレイリスト選択 -->
+            <div class="mb-3">
+              <label for="existing_playlist_id" class="form-label">既存のプレイリスト</label>
+              <select name="existing_playlist_id" id="existing_playlist_id" class="form-select">
+                <option value="">-- 選択してください --</option>
+                <% current_user.playlists.each do |playlist| %>
+                  <option value="<%= playlist.id %>"><%= playlist.name %></option>
+                <% end %>
+              </select>
+            </div>
           </div>
-        </div>
 
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-          <button type="submit" class="btn btn-primary">追加する</button>
-        </div>
-
-      <% end %>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+            <button type="submit" class="btn btn-primary">追加する</button>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
-</div>
+<% end %>
