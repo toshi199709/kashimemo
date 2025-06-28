@@ -59,9 +59,14 @@
           <div class="left-column" style="flex: 1;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
               <div>
-                <h3 style="margin-bottom: 5px;">
-                  <%= post.title.presence || "（タイトル未入力）" %>
-                </h3>
+<h3 style="margin-bottom: 5px;">
+  <% if params[:query].present? %>
+    <%= highlight(post.title, params[:query]) %>
+  <% else %>
+    <%= post.title.presence || "（タイトル未入力）" %>
+  <% end %>
+</h3>
+
                 <p style="margin-top: 0; font-size: 0.9em;">
                   <strong></strong> <%= post.category.name if post.category.present? %>
                 </p>
