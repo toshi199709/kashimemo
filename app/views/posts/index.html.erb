@@ -1,26 +1,26 @@
 <%# 上部操作バー：横並び（全体） %>
 <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0; flex-wrap: wrap; gap: 10px;">
   
-  <%# 左：新規投稿ボタン（ログイン時のみ） %>
-  <div>
-    <% if user_signed_in? %>
-      <%= link_to "＋ 新しい投稿を作成する", new_post_path, class: "load-btn" %>
+<%# 左：新規投稿ボタン（ログイン時のみ）または空ブロック %>
+<div style="width: 200px;">
+  <% if user_signed_in? %>
+    <%= link_to "＋ 新しい投稿を作成する", new_post_path, class: "load-btn" %>
+  <% end %>
+</div>
+
+
+  <%# 中央：検索フォーム（ログイン状態に関係なく表示） %>
+  <div style="display: flex; justify-content: center; margin-top: 20px; margin-bottom: 20px;">
+    <%= form_with url: posts_path, method: :get, local: true, html: {
+      class: "search-form",
+      style: "display: flex; gap: 10px; align-items: center; margin-left: 120px;"
+    } do |form| %>
+      <%= form.text_field :query, value: params[:query], placeholder: "キーワードで検索", style: "width: 300px; padding: 6px; border-radius: 5px;" %>
+      <%= form.submit "検索", style: "padding: 6px 12px;" %>
+      <%= hidden_field_tag :category_id, params[:category_id] %>
+      <%= hidden_field_tag :sort, params[:sort] %>
     <% end %>
   </div>
-
-  <%# 中央：検索フォーム（ログイン時のみ） %>
-  <% if user_signed_in? %>
-    <div style="display: flex; justify-content: center; margin-top: 20px; margin-bottom: 20px;">
-      <%= form_with url: posts_path, method: :get, local: true, html: {
-        style: "display: flex; gap: 10px; align-items: center; margin-left: 120px;"
-      } do |form| %>
-        <%= form.text_field :query, value: params[:query], placeholder: "キーワードで検索", style: "width: 300px; padding: 6px; border-radius: 5px;" %>
-        <%= form.submit "検索", style: "padding: 6px 12px;" %>
-        <%= hidden_field_tag :category_id, params[:category_id] %>
-        <%= hidden_field_tag :sort, params[:sort] %>
-      <% end %>
-    </div>
-  <% end %>
 
   <%# 右：カテゴリと並び替え %>
   <div style="display: flex; align-items: center; gap: 10px;">
@@ -37,7 +37,7 @@
   </div>
 </div>
 
-<%# ✅ 投稿一覧 or 該当なしメッセージ %>
+<%# ⬆️ 投稿一覧 or 該当なしメッセージ %>
 <% if @posts.empty? %>
   <p style="text-align: center; color: #999; font-size: 1.1em; margin-top: 40px;">
     該当する投稿は見つかりませんでした。
@@ -59,19 +59,17 @@
           <div class="left-column" style="flex: 1;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
               <div>
-<h3 style="margin-bottom: 5px;">
-  <% if params[:query].present? %>
-    <%= highlight(post.title, params[:query]) %>
-  <% else %>
-    <%= post.title.presence || "（タイトル未入力）" %>
-  <% end %>
-</h3>
-
+                <h3 style="margin-bottom: 5px;">
+                  <% if params[:query].present? %>
+                    <%= highlight(post.title, params[:query]) %>
+                  <% else %>
+                    <%= post.title.presence || "（タイトル未入力）" %>
+                  <% end %>
+                </h3>
                 <p style="margin-top: 0; font-size: 0.9em;">
                   <strong></strong> <%= post.category.name if post.category.present? %>
                 </p>
               </div>
-
               <div onclick="event.stopPropagation();">
                 <%= render "posts/like_button", post: post %>
               </div>
